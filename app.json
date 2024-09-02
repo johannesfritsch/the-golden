@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "the-golden-app",
+    "name": "The Golden",
     "slug": "the-golden-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,7 +23,8 @@
       },
       "permissions": [
         "android.permission.NFC"
-      ]
+      ],
+      "package": "de.jfritsch.thegolden"
     },
     "web": {
       "bundler": "metro",
