@@ -30,11 +30,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <View style={tw`h-full relative`}>
-        <View style={tw``}>
-          <Slot />
-        </View>
-      </View>
+      <Slot />
     </ThemeProvider>
   );
 }
