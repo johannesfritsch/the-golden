@@ -3,7 +3,6 @@ import { View, Text } from 'react-native';
 import nfcManager, { NfcTech } from 'react-native-nfc-manager';
 import Rive, { Alignment, Fit } from 'rive-react-native';
 import { Dimensions } from 'react-native';
-import Logo from '../assets/images/logo.svg';
 import { router } from 'expo-router';
 
 export default function LoginPage() {
