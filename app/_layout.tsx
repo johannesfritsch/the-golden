@@ -35,7 +35,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Header />
-        <ScrollView style={{ backgroundColor: '#fff', flexGrow: 1, gap: 10, padding: 10 }}>
+        <ScrollView style={{ backgroundColor: '#fff', flexGrow: 1, gap: 10, padding: 20 }}>
           <Slot />
           <Footer />
         </ScrollView>
