@@ -1,14 +1,16 @@
 import { Image } from 'expo-image';
-import { Dimensions, Text, View } from 'react-native'
+import { Dimensions, Pressable, Text, View } from 'react-native'
 import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
 import { useSharedValue } from "react-native-reanimated";
 import { useRef } from 'react';
+import { Link, router } from 'expo-router';
 
 export type EventCardProps = {
     event: {
         id: number
         name: string
-        date: string
+        startDate: string
+        endDate: string
         location: string
         images: string[]
         description: string
@@ -36,19 +38,19 @@ const EventCard = ({ event }: EventCardProps) => {
                     onSnapToItem={(index) => console.log('current index:', index)}
                     onProgressChange={progress}
                     renderItem={({ item }) => (
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                            }}
-                        >
+                        <Pressable style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                        }} onPress={() => router.push(`/events/${event.id}`)}>
+
                             <Image
                                 source={{ uri: item }}
                                 style={{
                                     width: '100%',
                                     height: '100%',
                                 }} />
-                        </View>
+
+                        </Pressable>
                     )}
                 />
 
@@ -62,10 +64,14 @@ const EventCard = ({ event }: EventCardProps) => {
                 />
 
             </View>
-            <View style={{ paddingVertical: 10 }}>
-                <Text style={{ fontWeight: 'bold' }}>{event.name}</Text>
+            <View style={{ paddingVertical: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 5 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{event.name}</Text>
+                    <Text style={{ fontWeight: 'normal' }}>{event.startDate}</Text>
+                </View>
                 <Text style={{ fontWeight: 'normal' }}>{event.description}</Text>
             </View>
+
         </View>
     )
 }
