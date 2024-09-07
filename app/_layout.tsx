@@ -15,7 +15,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
-    RobotoBold: require('../assets/fonts/Roboto-Bold.ttf'),
+    RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
     RobotoItalic: require('../assets/fonts/Roboto-Italic.ttf'),
   });
 

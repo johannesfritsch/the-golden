@@ -1,27 +1,35 @@
+import CText from "@/components/CText"
 import EventGallery from "@/components/EventGallery"
 import Layout from "@/components/Layout"
 import { sampleEvents } from "@/data/event"
 import { AntDesign, Feather } from "@expo/vector-icons"
 import { Link } from "expo-router"
-import { View, Text } from "react-native"
+import { useState } from "react"
+import { View, Text, Pressable } from "react-native"
 
 const EventDetails = () => {
     const event = sampleEvents[0];
+    const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
     return (
         <Layout header={{ leftButton: 'back', rightButton: 'auth' }} showTabBar={false} topElement={<EventGallery hideLabels fullWidth event={event} onPress={() => { }} />}>
             {/* Name & date */}
             <View style={{ justifyContent: 'space-between', paddingBottom: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 25 }}>Three luxurious days in Northern Italy '25</Text>
+                <CText type='h1'>Three luxurious days in Northern Italy '25</CText>
             </View>
             {/* Venue */}
             <View style={{ justifyContent: 'space-between', paddingBottom: 5 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{event.venue.name}, {event.venue.location.city}, {event.venue.location.country.code}</Text>
+                <CText type='h3'>{event.venue.name}, {event.venue.location.city}, {event.venue.location.country.code}</CText>
             </View>
             {/* Long description */}
-            <View style={{ justifyContent: 'space-between', paddingTop: 15, paddingBottom: 0 }}>
-                <Text style={{ fontWeight: 'normal', color: '#666', fontSize: 13, lineHeight: 17, fontFamily: 'MontserratRegular' }}>{event.description.long}</Text>
-            </View>
+            {!isDescriptionExpanded && <View style={{ paddingTop: 15, paddingBottom: 0, flexDirection: 'row' }}>
+                <CText type='normal'>{event.description.short} </CText>
+                <Pressable onPress={() => setIsDescriptionExpanded(true)}><CText type='underline'>more</CText></Pressable>
+            </View>}
+            {isDescriptionExpanded && <View style={{ paddingTop: 15, paddingBottom: 0 }}>
+                <CText type='normal'>{event.description.long}</CText>
+                <Pressable onPress={() => setIsDescriptionExpanded(false)}><CText type='underline'>less</CText></Pressable>
+            </View>}
             {/* Line */}
             <View style={{ marginTop: 25, borderTopWidth: 1, borderTopColor: '#CCC' }}>
 
@@ -32,8 +40,12 @@ const EventDetails = () => {
                     <AntDesign name="like2" size={35} color="#B49146" />
                 </View>
                 <View style={{ flexShrink: 1 }}>
-                    <Text style={{ color: '#333', fontWeight: 'bold', fontSize: 16, marginBottom: 5 }}>{event.type === 'peer_reviewed' ? 'Peer Reviewed Guest List' : 'Open Guest List'}</Text>
-                    <Text style={{ color: '#666', fontWeight: 'normal', fontSize: 13, lineHeight: 17, fontFamily: 'MontserratRegular' }}>Nostrud eiusmod dolor tempor aute cillum ad sint amet minim. Nostrud non pariatur amet minim occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.</Text>
+                    <View style={{ marginBottom: 5 }}>
+                    <CText type="h3">{event.type === 'peer_reviewed' ? 'Peer Reviewed Guest List' : 'Open Guest List'}</CText>
+                    </View>
+                    <View>
+                    <CText type="normal">Nostrud eiusmod dolor tempor aute cillum ad sint amet minim. Nostrud non pariatur amet minim occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.</CText>
+                    </View>
                 </View>
             </View>
         </Layout>
