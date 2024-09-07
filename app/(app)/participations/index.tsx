@@ -1,9 +1,10 @@
+import Layout from '@/components/Layout'
 import React from 'react'
 import { View, Text } from 'react-native'
 
 const Participations = () => {
   return (
-    <View><Text>Participations</Text></View>
+    <Layout header={{ leftButton: 'menu', rightButton: 'auth' }}><Text>Participations</Text></Layout>
   )
 }
 

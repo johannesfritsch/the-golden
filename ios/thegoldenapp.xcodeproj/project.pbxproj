@@ -12,8 +12,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		8F4F18212C865A1E0094CD52 /* tap-to-unlock.riv in Resources */ = {isa = PBXBuildFile; fileRef = 8F4F18202C865A1E0094CD52 /* tap-to-unlock.riv */; };
-		8F4F18232C87938B0094CD52 /* logo.riv in Resources */ = {isa = PBXBuildFile; fileRef = 8F4F18222C87938B0094CD52 /* logo.riv */; };
 		8F4F18252C89D8420094CD52 /* peeking-cat.riv in Resources */ = {isa = PBXBuildFile; fileRef = 8F4F18242C89D8420094CD52 /* peeking-cat.riv */; };
+		8F4F18292C8B134A0094CD52 /* logo.riv in Resources */ = {isa = PBXBuildFile; fileRef = 8F4F18282C8B134A0094CD52 /* logo.riv */; };
+		8F4F182B2C8B3D550094CD52 /* scan-nfc-tag.riv in Resources */ = {isa = PBXBuildFile; fileRef = 8F4F182A2C8B3D550094CD52 /* scan-nfc-tag.riv */; };
 		96905EF65AED1B983A6B3ABC /* libPods-thegoldenapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-thegoldenapp.a */; };
 		AFDEE03A6622586AAFD42577 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 894999878E415C88D7F177F0 /* PrivacyInfo.xcprivacy */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
@@ -33,8 +34,9 @@
 		7A4D352CD337FB3A3BF06240 /* Pods-thegoldenapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-thegoldenapp.release.xcconfig"; path = "Target Support Files/Pods-thegoldenapp/Pods-thegoldenapp.release.xcconfig"; sourceTree = "<group>"; };
 		894999878E415C88D7F177F0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = thegoldenapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8F4F18202C865A1E0094CD52 /* tap-to-unlock.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tap-to-unlock.riv"; path = "../../../../../Desktop/tap-to-unlock.riv"; sourceTree = "<group>"; };
-		8F4F18222C87938B0094CD52 /* logo.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = logo.riv; path = ../../../../../Desktop/logo.riv; sourceTree = "<group>"; };
 		8F4F18242C89D8420094CD52 /* peeking-cat.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = "peeking-cat.riv"; path = "../../../../../Desktop/peeking-cat.riv"; sourceTree = "<group>"; };
+		8F4F18282C8B134A0094CD52 /* logo.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = logo.riv; path = ../../../../../Desktop/logo.riv; sourceTree = "<group>"; };
+		8F4F182A2C8B3D550094CD52 /* scan-nfc-tag.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = "scan-nfc-tag.riv"; path = "../../../../../Desktop/scan-nfc-tag.riv"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = thegoldenapp/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		CEB8C1D061284C309EF98CE6 /* thegoldenapp-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "thegoldenapp-Bridging-Header.h"; path = "thegoldenapp/thegoldenapp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -115,9 +117,10 @@
 		8F4F18132C84D62B0094CD52 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				8F4F182A2C8B3D550094CD52 /* scan-nfc-tag.riv */,
 				8F4F18202C865A1E0094CD52 /* tap-to-unlock.riv */,
 				8F4F18242C89D8420094CD52 /* peeking-cat.riv */,
-				8F4F18222C87938B0094CD52 /* logo.riv */,
+				8F4F18282C8B134A0094CD52 /* logo.riv */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -219,7 +222,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
-				8F4F18232C87938B0094CD52 /* logo.riv in Resources */,
+				8F4F182B2C8B3D550094CD52 /* scan-nfc-tag.riv in Resources */,
+				8F4F18292C8B134A0094CD52 /* logo.riv in Resources */,
 				8F4F18252C89D8420094CD52 /* peeking-cat.riv in Resources */,
 				8F4F18212C865A1E0094CD52 /* tap-to-unlock.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -487,10 +491,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -548,10 +549,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
