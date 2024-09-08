@@ -4,9 +4,10 @@ import { Text } from 'react-native';
 export type CTextProps = {
     children: ReactNode,
     type: 'h1' | 'h2' | 'h3' | 'normal' | 'bold' | 'italic' | 'underline',
+    style?: object,
 }
 
-const CText = ({ children, type }: CTextProps) => {
+const CText = ({ children, type, style: additionalStyle = {} }: CTextProps) => {
     const style = {
         // Defaults
 
@@ -40,7 +41,8 @@ const CText = ({ children, type }: CTextProps) => {
             fontFamily: 'RobotoRegular',
             textDecorationLine: 'underline',
         } : {
-        })
+        }),
+        ...additionalStyle,
     }
 
     return (

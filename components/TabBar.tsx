@@ -3,6 +3,7 @@ import React from 'react'
 import TabBarButton from './TabBarButton';
 import { router, usePathname } from 'expo-router';
 import { AntDesign, Feather } from '@expo/vector-icons';
+import BottomBar from './BottomBar';
 
 const tabs = [
   { name: 'events', href: '/events', title: 'Events', icon: (props: any)=> <AntDesign name="home" size={26} {...props} />},
@@ -18,13 +19,13 @@ const TabBar = () => {
   const greyColor = '#737373';
 
   return (
-    <View style={styles.tabbar}>
+    <BottomBar>
       {tabs.map((tab, index) => {
         return (
           <TabBarButton
             key={tab.name}
             icon={tab.icon}
-            style={styles.tabbarItem}
+            style={{}}
             onPress={() => router.navigate(tab.href as any)}
             onLongPress={() => router.navigate(tab.href as any)}
             isFocused={false}
@@ -33,31 +34,8 @@ const TabBar = () => {
           />
         )
       })}
-    </View>
+    </BottomBar>
   )
 }
-
-const styles = StyleSheet.create({
-  tabbar: {
-    position: 'absolute',
-    bottom: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingVertical: 15,
-    borderTopEndRadius: 20,
-    borderTopStartRadius: 20,
-    borderCurve: 'continuous',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    zIndex: 100,
-  },
-  tabbarItem: {
-
-  }
-})
 
 export default TabBar

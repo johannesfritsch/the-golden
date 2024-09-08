@@ -6,23 +6,23 @@ import TabBar from './TabBar'
 
 export type LayoutPropsProps = {
   children: ReactNode
-  header: HeaderProps
+  header?: ReactNode
   topElement?: ReactNode
-  showTabBar?: boolean
+  footer?: ReactNode
 }
 
-const LayoutProps = ({ children, header, topElement, showTabBar = true }: LayoutPropsProps) => {
+const LayoutProps = ({ children, header, topElement, footer }: LayoutPropsProps) => {
   return (
     <>
-    <Header {...header} />
-    <ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
-      {topElement}
-      <View style={{ padding: 20 }}>
-        {children}
-      </View>
-      <Footer />
-    </ScrollView>
-    {showTabBar && <TabBar />}
+      {header}
+      <ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
+        {topElement}
+        <View style={{ padding: 20 }}>
+          {children}
+        </View>
+        <Footer />
+      </ScrollView>
+      {footer}
     </>
   )
 }

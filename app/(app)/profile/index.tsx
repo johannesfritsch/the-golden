@@ -1,10 +1,14 @@
+import Header from '@/components/Header'
 import Layout from '@/components/Layout'
+import TabBar from '@/components/TabBar'
 import React from 'react'
-import { View, Text } from 'react-native'
+import { Text } from 'react-native'
 
 const Profile = () => {
   return (
-    <Layout header={{ leftButton: 'menu', rightButton: 'none' }}><Text>Profile</Text></Layout>
+    <Layout header={<Header leftButton='menu' rightButton='auth' />} footer={<TabBar />}>
+      <Text>Profile</Text>
+    </Layout>
   )
 }
 
