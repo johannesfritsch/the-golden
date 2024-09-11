@@ -40,7 +40,7 @@ const Login = () => {
                     <Rive style={{ width: 200, height: 200 }} resourceName='scan-nfc-tag' artboardName='Artboard' stateMachineName='State Machine 1' alignment={Alignment.Center} fit={Fit.Contain} />
                 </View>
                 <View style={{ marginTop: 40 }}>
-                    <Pressable onPress={() => router.navigate('/modal')}>
+                    <Pressable onPress={() => router.navigate('/auth/loginInfo')}>
                         <CText type="underline" style={{ textAlign: 'center' }}>I don't have a tag</CText>
                     </Pressable>
                 </View>

@@ -15,6 +15,11 @@ export type Event = {
     type: 'first_come' | 'peer_reviewed';
     windowStart: string;
     windowEnd: string;
+    properties: {
+        icon: string;
+        title: string;
+        description: string;
+    }[],
     days: {
         min: number;
         max: number;
@@ -81,8 +86,13 @@ export const sampleEvents: Event[] = [{
     name: '3-day luxury in Northern Italy \'25',
     state: 'boarding',
     type: 'peer_reviewed',
-    windowStart: '2024-09-11 08:00:00',
-    windowEnd: '2024-09-21 23:59:00',
+    windowStart: '2024-09-12 08:00:00',
+    windowEnd: '2024-09-25 23:59:00',
+    properties: [{
+        icon: 'staro',
+        title: 'Luxury',
+        description: 'Nostrud eiusmod dolor tempor aute cillum ad sint amet minim. Nostrud non pariatur amet minim occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.'
+    }],
     capacity: {
         min: 25,
         max: 50,
@@ -215,6 +225,11 @@ export const sampleEvents: Event[] = [{
     type: 'peer_reviewed',
     windowStart: '2024-09-17 08:00:00',
     windowEnd: '2024-09-27 23:59:00',
+    properties: [{
+        icon: 'like2',
+        title: 'Birthday Party',
+        description: 'Nostrud eiusmod dolor tempor aute cillum ad sint amet minim. Nostrud non pariatur amet minim occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.'
+    }],
     capacity: {
         min: 25,
         max: 50,
@@ -279,6 +294,11 @@ export const sampleEvents: Event[] = [{
     type: 'first_come',
     windowStart: '2025-08-01',
     windowEnd: '2025-08-10',
+    properties: [{
+        icon: 'like2',
+        title: 'Birthday Party',
+        description: 'Nostrud eiusmod dolor tempor aute cillum ad sint amet minim. Nostrud non pariatur amet minim occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.'
+    }],
     capacity: {
         min: 25,
         max: 50,

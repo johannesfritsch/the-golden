@@ -16,15 +16,15 @@ export type EventGalleryProps = {
 
 const EventGallery = ({ event, onPress, fullWidth = false, hideLabels = false }: EventGalleryProps) => {
     const progress = useSharedValue<number>(0);
-    const [topRightLabel, setTopRightLabel] = useState<string|null>(null);
+    const [topRightLabel, setTopRightLabel] = useState<string | null>(null);
 
     const ratio = 0.667708333333333;
 
     const calculateTimeLeft = () => {
         const now = new Date();
         const distance = intervalToDuration({ start: now, end: Date.parse(event.windowStart) });
-
-        if (!distance.years && !distance.months && (!distance.days || distance.days < 4)) {
+        if (!distance.years && !distance.months && !distance.days && (distance.hours && distance.hours <= 24)) {
+            // Last 24h
             setTopRightLabel(`${((distance.days || 0) * 24 + (distance.hours || 0)).toString().padStart(2, '0')}h ${(distance.minutes || 0).toString().padStart(2, '0')}m ${(distance.seconds || 0).toString().padStart(2, '0')}s`);
         } else if (!distance.years && !distance.months && distance.days) {
             setTopRightLabel(formatDistance(event.windowStart, now, { addSuffix: true }));
@@ -72,8 +72,7 @@ const EventGallery = ({ event, onPress, fullWidth = false, hideLabels = false }:
                 )}
             />
 
-            {/* {!hideLabels && <View style={{ position: 'absolute', top: 10, right: 10, backgroundColor: 'white', padding: 10, borderRadius: 20, shadowOpacity: 0.2, shadowRadius: 2, shadowColor: 'black', shadowOffset: { width: 0, height: 3 } }}><Text style={{ fontSize: 14, fontWeight: 'bold' }}>{event.type === 'peer_reviewed' ? 'Peer Review' : 'Open Guest List'}</Text></View>} */}
-            {!hideLabels && topRightLabel && <View style={{ position: 'absolute', top: 10, right: 10, backgroundColor: 'white', padding: 10, borderRadius: 20, shadowOpacity: 0.2, shadowRadius: 2, shadowColor: 'black', shadowOffset: { width: 0, height: 3 }}}><CText type="h3">{topRightLabel}</CText></View>}
+            {!hideLabels && topRightLabel && <View style={{ position: 'absolute', top: 10, right: 10, backgroundColor: 'white', padding: 10, borderRadius: 20, shadowOpacity: 0.2, shadowRadius: 2, shadowColor: 'black', shadowOffset: { width: 0, height: 3 } }}><CText type="h3">{topRightLabel}</CText></View>}
 
             <Pagination.Basic
                 progress={progress}

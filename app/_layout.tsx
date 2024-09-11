@@ -7,7 +7,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native';
-import Modal from './modal';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,7 +35,7 @@ export default function RootLayout() {
         <SafeAreaView style={{ flex: 0, backgroundColor: '#B29146' }} />
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
           <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-            <Stack.Screen name="modal" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+            <Stack.Screen name="(app)/auth/loginInfo" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
           </Stack>
         </SafeAreaView>
       </GestureHandlerRootView>

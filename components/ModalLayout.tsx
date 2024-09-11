@@ -1,19 +1,25 @@
+import { AntDesign } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { Platform, SafeAreaView, Text, View } from 'react-native'
 
 export type ModalLayoutProps = {
-    title: string
     children: React.ReactNode
+    onClose: () => void
 }
 
-const ModalLayout = ({ title, children }: ModalLayoutProps) => {
+const ModalLayout = ({ children, onClose }: ModalLayoutProps) => {
     return (
-        <SafeAreaView style={{ backgroundColor: 'white' }}>
-            <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
-                <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-                {children}
-            </View>
-        </SafeAreaView>
+        <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
+            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+            <SafeAreaView>
+                <View style={{ padding: 20 }}>
+                    <View>
+                        <AntDesign name="close" size={24} color="black" onPress={onClose} />
+                    </View>
+                    {children}
+                </View>
+            </SafeAreaView>
+        </View>
     )
 }
 
