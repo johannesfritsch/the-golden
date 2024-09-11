@@ -1,5 +1,6 @@
 import ButtonBottomBar from '@/components/ButtonBottomBar'
 import CText from '@/components/CText'
+import { useDrawer } from '@/components/Drawer'
 import Header from '@/components/Header'
 import Layout from '@/components/Layout'
 import { router } from 'expo-router'
@@ -17,7 +18,7 @@ const Login = () => {
                 alertMessage: 'Please scan your NFC tag',
             });
 
-            const tag = await nfcManager.getTag();
+            await nfcManager.getTag();
 
             router.navigate('/events');
         } catch (error) {
@@ -28,7 +29,7 @@ const Login = () => {
     }
 
     return (
-        <Layout header={<Header leftButton='none' rightButton='none' />} footer={<ButtonBottomBar caption='Login using NFC' onClick={handleScanPress} />}>
+        <Layout header={<Header leftButton='menu' rightButton='none' />} footer={<ButtonBottomBar caption='Login using NFC' onClick={handleScanPress} />}>
             <View style={{ paddingTop: 60 }}>
                 <View style={{ marginBottom: 20 }}>
                     <CText type="h1" style={{ textAlign: 'center' }}>Scan your NFC chip</CText>

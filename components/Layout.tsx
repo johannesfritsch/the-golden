@@ -1,8 +1,6 @@
 import { ScrollView, View } from 'react-native'
 import Footer from './Footer'
 import { ReactNode } from 'react'
-import Header, { HeaderProps } from './Header'
-import TabBar from './TabBar'
 
 export type LayoutPropsProps = {
   children: ReactNode
@@ -13,7 +11,7 @@ export type LayoutPropsProps = {
 
 const LayoutProps = ({ children, header, topElement, footer }: LayoutPropsProps) => {
   return (
-    <>
+    <View style={{ height: '100%' }}>
       {header}
       <ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
         {topElement}
@@ -23,7 +21,7 @@ const LayoutProps = ({ children, header, topElement, footer }: LayoutPropsProps)
         <Footer />
       </ScrollView>
       {footer}
-    </>
+    </View>
   )
 }
 

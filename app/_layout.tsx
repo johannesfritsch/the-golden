@@ -2,11 +2,10 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native';
+import Drawer from '@/components/Drawer';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,12 +31,11 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView>
-        <SafeAreaView style={{ flex: 0, backgroundColor: '#B29146' }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+        <Drawer>
           <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
             <Stack.Screen name="(app)/auth/loginInfo" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
           </Stack>
-        </SafeAreaView>
+        </Drawer>
       </GestureHandlerRootView>
     </ThemeProvider>
   );
