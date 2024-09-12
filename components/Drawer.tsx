@@ -1,8 +1,10 @@
 import { createContext, useContext, useState } from "react";
-import { Dimensions, Pressable, View } from "react-native";
+import { Alert, Dimensions, Pressable, View } from "react-native";
 import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import DrawerContent from "./DrawerContent";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AntDesign } from "@expo/vector-icons";
+import CText from "./CText";
 
 type DrawerContextType = {
     drawerOpen: boolean;
@@ -37,7 +39,6 @@ const Drawer = ({ children }: DrawerProps) => {
         height: '100%',
         left: 0,
         backgroundColor: '#ffffff',
-        paddingTop: insets.top,
     }));
 
     const bodyStyle = useAnimatedStyle(() => ({
@@ -53,8 +54,8 @@ const Drawer = ({ children }: DrawerProps) => {
         left: 0,
         top: 0,
         zIndex: 10000,
-        display: xOffset.value / drawerWidth >= 0.0 ? 'flex' : 'none',
         backgroundColor: 'black',
+        display: xOffset.value / drawerWidth >= 0.1 ? 'flex' : 'none',
         opacity: xOffset.value / drawerWidth * 0.5,
     }));
 
@@ -69,7 +70,16 @@ const Drawer = ({ children }: DrawerProps) => {
     return (
         <DrawerContext.Provider value={{ drawerOpen: open, toggleDrawer }}>
             <Animated.View style={drawerStyle}>
-                <DrawerContent />
+                <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 50 + insets.top, zIndex: 1000, backgroundColor: '#B29146' }}>
+                    <View style={{ position: 'absolute', bottom: 10, left: 10 }}>
+                        <Pressable style={{}} onPress={toggleDrawer}>
+                            <AntDesign name='close' size={34} color='white' />
+                        </Pressable>
+                    </View>
+                </View>
+                <View style={{ paddingHorizontal: 20, paddingTop: 50 + insets.top }}>
+                    <DrawerContent />
+                </View>
             </Animated.View>
 
             <Animated.View style={bodyStyle}>
