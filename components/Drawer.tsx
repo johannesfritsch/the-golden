@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Pressable, View } from "react-native";
 import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import DrawerContent from "./DrawerContent";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -46,6 +46,18 @@ const Drawer = ({ children }: DrawerProps) => {
         transform: [{ translateX: xOffset.value }],
     }));
 
+    const overlayStyle = useAnimatedStyle(() => ({
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: 0,
+        top: 0,
+        zIndex: 10000,
+        display: xOffset.value / drawerWidth >= 0.0 ? 'flex' : 'none',
+        backgroundColor: 'black',
+        opacity: xOffset.value / drawerWidth * 0.5,
+    }));
+
     const toggleDrawer = () => {
         setOpen(!open);
         xOffset.value = withTiming(xOffset.value === 0 ? drawerWidth : 0, {
@@ -61,6 +73,9 @@ const Drawer = ({ children }: DrawerProps) => {
             </Animated.View>
 
             <Animated.View style={bodyStyle}>
+                <Animated.View style={overlayStyle}>
+                    <Pressable onPress={toggleDrawer} style={{ width: '100%', height: '100%' }} />
+                </Animated.View>
                 <View style={{ flex: 1 }}>
                     {children}
                 </View>
