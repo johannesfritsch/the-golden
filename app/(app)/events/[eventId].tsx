@@ -14,7 +14,7 @@ const EventDetails = () => {
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
     return (
-        <Layout header={<Header leftButton='back' rightButton='auth' />} topElement={<EventGallery hideLabels fullWidth event={event} onPress={() => { }} />}>
+        <Layout topElement={<Header leftButton='back' rightButton='auth' />} header={<EventGallery hideLabels fullWidth event={event} onPress={() => { }} />}>
             {/* Name & date */}
             <View style={{ justifyContent: 'space-between', paddingBottom: 20 }}>
                 <CText type='h1'>Three luxurious days in Northern Italy '25</CText>
@@ -49,7 +49,7 @@ const EventDetails = () => {
             </View>
             {/* Event Type */}
             <View style={{ marginVertical: 25, borderBottomWidth: 1, borderBottomColor: '#CCC', gap: 25, paddingTop: 5, paddingBottom: 30 }}>
-                <EventProperty icon={'like2'} title={event.type === 'peer_reviewed' ? 'Peer Reviewed Guest List' : 'Open Guest List'} description={'Fugiat irure proident esse laboris culpa quis consequat incididunt consectetur. Voluptate adipisicing sit officia laborum exercitation. Sunt esse ea sint in cupidatat sint exercitation.'} />
+                <EventProperty icon={'like2'} title={event.type === 'peer_reviewed' ? 'Peer Reviewed Guest List' : 'Open Guest List'} description={'Fugiat irure proident esse laboris culpa quis consequat incididunt consectetur. Sunt esse ea sint in cupidatat sint exercitation.'} />
                 {event.properties.map((property) => (
                     <EventProperty key={property.title} icon={property.icon} title={property.title} description={property.description} />
                 ))}

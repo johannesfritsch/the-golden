@@ -6,7 +6,7 @@ import { sampleEvents } from "@/data/event";
 
 const EventList = () => {
     return (
-        <Layout header={<Header leftButton='menu' rightButton='auth' />} footer={<TabBar />}>
+        <Layout topElement={<Header leftButton='menu' rightButton='auth' />} bottomElement={<TabBar />}>
             {sampleEvents.map(event => (
                 <EventCard key={event.id} event={event} />
             ))}

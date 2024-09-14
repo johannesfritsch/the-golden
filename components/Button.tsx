@@ -8,7 +8,7 @@ export type ButtonProps = {
 
 const Button = ({ caption, onClick }: ButtonProps) => {
     return (
-        <Pressable onPress={onClick} style={{ backgroundColor: '#B29146', width: '100%', padding: 10, borderRadius: 10 }}>
+        <Pressable onPress={onClick} style={{ backgroundColor: '#B29146', width: '100%', paddingHorizontal: 10, paddingVertical: 20, borderRadius: 20 }}>
             <CText type='bold' style={{ textAlign: 'center', color: 'white', fontSize: 16 }}>{caption}</CText>
         </Pressable>
     )

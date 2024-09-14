@@ -1,26 +1,27 @@
-import { ScrollView, View } from 'react-native'
-import Footer from './Footer'
+import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { ReactNode } from 'react'
 
 export type LayoutPropsProps = {
   children: ReactNode
-  header?: ReactNode
   topElement?: ReactNode
+  header?: ReactNode
   footer?: ReactNode
+  bottomElement?: ReactNode
+  style?: StyleProp<ViewStyle>
 }
 
-const LayoutProps = ({ children, header, topElement, footer }: LayoutPropsProps) => {
+const LayoutProps = ({ children, topElement, header,footer, bottomElement, style }: LayoutPropsProps) => {
   return (
-    <View style={{ height: '100%' }}>
-      {header}
+    <View style={[style, { height: '100%' }]}>
+      {topElement}
       <ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
-        {topElement}
+        {header}
         <View style={{ padding: 20 }}>
           {children}
         </View>
-        <Footer />
+        {footer || <View style={{ height: 90 }} />}
       </ScrollView>
-      {footer}
+      {bottomElement}
     </View>
   )
 }

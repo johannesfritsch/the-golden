@@ -12,7 +12,7 @@ const ModalLayout = ({ children, onClose }: ModalLayoutProps) => {
         <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
             <SafeAreaView>
-                <View style={{ padding: 20 }}>
+                <View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
                     <View>
                         <AntDesign name="close" size={24} color="black" onPress={onClose} />
                     </View>

@@ -3,7 +3,7 @@ import { router } from "expo-router"
 import { Dimensions, View, Text, Pressable } from "react-native"
 import Rive, { Alignment, Fit } from "rive-react-native"
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useDrawer } from "./Drawer";
+import { useDrawer } from "@/utils/use-drawer";
 
 export type HeaderProps = {
     leftButton: 'menu' | 'back' | 'none'
@@ -25,7 +25,7 @@ const Header = ({ leftButton, rightButton }: HeaderProps) => {
                 <Rive onRiveEventReceived={() => router.navigate('/events')} resourceName='logo' artboardName='Artboard' stateMachineName='State Machine 1' alignment={Alignment.Center} fit={Fit.Contain} />
             </View>
             <View style={{ position: 'absolute', right: 0, width: 70, height: 50, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-                {rightButton === 'auth' && <Pressable onPress={() => router.dismissAll()}><Feather name="user" size={30} color="white" /></Pressable>}
+                {rightButton === 'auth' && <Pressable onPress={() => router.navigate('/profile')}><Feather name="user" size={30} color="white" /></Pressable>}
             </View>
         </View>
     )

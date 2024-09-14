@@ -4,12 +4,12 @@ import TabBar from '@/components/TabBar'
 import React from 'react'
 import { View, Text } from 'react-native'
 
-const Participations = () => {
+const Imprint = () => {
   return (
     <Layout topElement={<Header leftButton='menu' rightButton='auth' />} bottomElement={<TabBar />}>
-      <Text>Participations</Text>
+      <Text>Imprint</Text>
     </Layout>
   )
 }
 
-export default Participations
+export default Imprint

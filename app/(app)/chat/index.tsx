@@ -6,7 +6,7 @@ import { View, Text } from 'react-native'
 
 const Chat = () => {
   return (
-    <Layout header={<Header leftButton='menu' rightButton='auth' />} footer={<TabBar />}>
+    <Layout topElement={<Header leftButton='menu' rightButton='auth' />} bottomElement={<TabBar />}>
       <Text>Chat</Text>
     </Layout>
   )

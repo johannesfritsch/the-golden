@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import React from 'react'
 import { Pressable, View } from 'react-native';
 
-const LoginLinfo = () => {
+const ProductInfo = () => {
     return (
         <ModalLayout onClose={() => { router.back() }}>
             <View style={{ marginTop: 100, alignItems: 'center', justifyContent: 'center' }}>
@@ -14,4 +14,4 @@ const LoginLinfo = () => {
     )
 }
 
-export default LoginLinfo
+export default ProductInfo

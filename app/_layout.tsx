@@ -33,7 +33,7 @@ export default function RootLayout() {
       <GestureHandlerRootView>
         <Drawer>
           <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-            <Stack.Screen name="(app)/auth/loginInfo" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+            <Stack.Screen name="(app)/info/productInfo" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
           </Stack>
         </Drawer>
       </GestureHandlerRootView>

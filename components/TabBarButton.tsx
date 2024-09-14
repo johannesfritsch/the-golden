@@ -67,7 +67,7 @@ const TabBarButton = ({ isFocused, label, color, icon, onPress, onLongPress }: T
 
             <Animated.Text style={[{
                 color,
-                fontSize: 11
+                fontSize: 13
             }, animatedTextStyle]}>
                 {label}
             </Animated.Text>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 4
+        gap: 6
     }
 })
 

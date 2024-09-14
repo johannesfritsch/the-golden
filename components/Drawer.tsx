@@ -4,22 +4,7 @@ import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from "
 import DrawerContent from "./DrawerContent";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
-import CText from "./CText";
-
-type DrawerContextType = {
-    drawerOpen: boolean;
-    toggleDrawer: () => void;
-};
-
-const DrawerContext = createContext<DrawerContextType | null>(null);
-
-export const useDrawer = () => {
-    const context = useContext(DrawerContext);
-    if (!context) {
-        throw new Error("useDrawer must be used within a DrawerProvider");
-    }
-    return context;
-};
+import { DrawerContext } from "@/utils/use-drawer";
 
 export type DrawerProps = {
     children: React.ReactNode;
@@ -38,7 +23,8 @@ const Drawer = ({ children }: DrawerProps) => {
         width: drawerWidth,
         height: '100%',
         left: 0,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#B29146',
+        zIndex: 10000,
     }));
 
     const bodyStyle = useAnimatedStyle(() => ({
@@ -53,7 +39,7 @@ const Drawer = ({ children }: DrawerProps) => {
         height: '100%',
         left: 0,
         top: 0,
-        zIndex: 10000,
+        zIndex: 1000,
         backgroundColor: 'black',
         display: xOffset.value / drawerWidth >= 0.1 ? 'flex' : 'none',
         opacity: xOffset.value / drawerWidth * 0.5,
@@ -77,7 +63,7 @@ const Drawer = ({ children }: DrawerProps) => {
                         </Pressable>
                     </View>
                 </View>
-                <View style={{ paddingHorizontal: 20, paddingTop: 50 + insets.top }}>
+                <View style={{ paddingHorizontal: 40, paddingTop: 20 + insets.top + 35 }}>
                     <DrawerContent />
                 </View>
             </Animated.View>

@@ -86,12 +86,12 @@ export const sampleEvents: Event[] = [{
     name: '3-day luxury in Northern Italy \'25',
     state: 'boarding',
     type: 'peer_reviewed',
-    windowStart: '2024-09-12 08:00:00',
-    windowEnd: '2024-09-25 23:59:00',
+    windowStart: '2024-09-14 08:00:00',
+    windowEnd: '2024-09-27 23:59:00',
     properties: [{
         icon: 'staro',
-        title: 'Luxury',
-        description: 'Nostrud eiusmod dolor tempor aute cillum ad sint amet minim. Nostrud non pariatur amet minim occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.'
+        title: 'Super Luxury',
+        description: 'Nostrud eiusmod dolor amet minim. Nostrud occaecat deserunt nulla anim voluptate. Dolor veniam excepteur magna ipsum laboris.'
     }],
     capacity: {
         min: 25,
@@ -214,8 +214,8 @@ export const sampleEvents: Event[] = [{
     }],
     images: ['https://www.functioncentral.co.uk/images/gallery/_headerImageMobile/1-Euridge-Manor-Wedding.jpg', 'https://wedlockers.com.au/assets/Uploads/Luxury-wedding-location-Linnaeus-Farm-Berry.jpg'],
     description: {
-        short: 'Euridge Manor is a stunning venue in Cotswolds.',
-        long: 'Euridge Manor is a stunning venue in Cotswolds. It is a beautiful wedding at Euridge Manor. Incididunt et velit duis duis aliquip est culpa incididunt veniam eu cupidatat. Occaecat voluptate voluptate ullamco excepteur sit veniam sunt aliqua.'
+        short: 'Euridge Manor is a stunning venue in Cotswolds. It is a beautiful wedding at Euridge Manor. Incididunt et velit duis duis aliquip est culpa incididunt.',
+        long: "Euridge Manor is a stunning venue in Cotswolds. It is a beautiful wedding at Euridge Manor. Incididunt et velit duis duis aliquip est culpa incididunt veniam eu cupidatat. Occaecat voluptate voluptate ullamco excepteur sit veniam sunt aliqua.\n\nEuridge Manor is a stunning venue in Cotswolds. It is a beautiful wedding at Euridge Manor. Incididunt et velit duis duis aliquip est culpa incididunt veniam eu cupidatat. Occaecat voluptate voluptate ullamco excepteur sit veniam sunt aliqua.Euridge Manor is a stunning venue in Cotswolds. It is a beautiful wedding at Euridge Manor. Incididunt et velit duis duis aliquip est culpa incididunt veniam eu cupidatat. Occaecat voluptate voluptate ullamco excepteur sit veniam sunt aliqua.\n\nEuridge Manor is a stunning venue in Cotswolds. It is a beautiful wedding at Euridge Manor. Incididunt et velit duis duis aliquip est culpa incididunt veniam eu cupidatat. Occaecat voluptate voluptate ullamco excepteur sit veniam sunt aliqua."
     },
     minPrice: { value: 2499, currency: 'EUR', currencySymbol: '€' },
 }, {

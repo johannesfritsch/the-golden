@@ -6,10 +6,10 @@ import { AntDesign, Feather } from '@expo/vector-icons';
 import BottomBar from './BottomBar';
 
 const tabs = [
-  { name: 'events', href: '/events', title: 'Events', icon: (props: any)=> <AntDesign name="home" size={26} {...props} />},
-  { name: 'participations', href: '/participations', title: 'My Events', icon: (props: any)=> <AntDesign name="hearto" size={26} {...props} />},
-  { name: 'chat', href: '/chat', title: 'Chat', icon: (props: any)=> <AntDesign name="message1" size={26} {...props} />},
-  { name: 'profile', href: '/profile', title: 'Profile', icon: (props: any)=> <AntDesign name="user" size={26} {...props} /> }
+  { name: 'events', href: '/events', title: 'Events', icon: (props: any)=> <Feather name="home" size={26} {...props} />},
+  { name: 'participations', href: '/participations', title: 'My Events', icon: (props: any)=> <Feather name="heart" size={26} {...props} />},
+  { name: 'chat', href: '/chat', title: 'Chat', icon: (props: any)=> <Feather name="message-square" size={26} {...props} />},
+  { name: 'profile', href: '/profile', title: 'Profile', icon: (props: any)=> <Feather name="user" size={26} {...props} /> }
 ];
 
 const TabBar = () => {

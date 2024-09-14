@@ -16,7 +16,7 @@ const CText = ({ children, type, style: additionalStyle = {} }: CTextProps) => {
             lineHeight: 38,
             fontFamily: 'RobotoMedium',
         } : type === 'h2' ? {
-            fontSize: 18,
+            fontSize: 22,
             fontFamily: 'RobotoMedium',
         } : type === 'h3' ? {
             fontSize: 17,
