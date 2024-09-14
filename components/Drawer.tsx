@@ -31,6 +31,7 @@ const Drawer = ({ children }: DrawerProps) => {
         flex: 1,
         width: '100%',
         transform: [{ translateX: xOffset.value }],
+        backgroundColor: 'white',
     }));
 
     const overlayStyle = useAnimatedStyle(() => ({

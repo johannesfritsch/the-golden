@@ -47,8 +47,6 @@ const Login = () => {
                 <View style={{ marginBottom: 40 }}>
                     <Pressable onPress={() => router.navigate('/info/productInfo')}><CText type="underline" style={{ textAlign: 'center' }}>I don't have an Aura yet</CText></Pressable>
                 </View>
-                
-
             </View>
         </Layout>
     )
