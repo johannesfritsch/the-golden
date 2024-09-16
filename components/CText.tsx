@@ -3,7 +3,7 @@ import { StyleProp, Text, TextStyle } from 'react-native';
 
 export type CTextProps = {
     children: ReactNode,
-    type: 'h1' | 'h2' | 'h3' | 'normal' | 'bold' | 'italic' | 'underline',
+    type: 'h1' | 'h2' | 'h3' | 'normal' | 'bold' | 'italic' | 'underline' | 'boldunderline',
     style?: StyleProp<TextStyle>,
 }
 
@@ -38,6 +38,11 @@ const CText = ({ children, type, style: additionalStyle = {} }: CTextProps) => {
                 fontSize: 14,
                 lineHeight: 21,
                 fontFamily: 'RobotoRegular',
+                textDecorationLine: 'underline',
+            } : type === 'boldunderline' ? {
+                fontSize: 14,
+                lineHeight: 21,
+                fontFamily: 'RobotoMedium',
                 textDecorationLine: 'underline',
             } : {
             }),

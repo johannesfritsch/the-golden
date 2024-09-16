@@ -33,11 +33,6 @@ const links: Link[] = [
 
 const smallLinks: Link[] = [
     {
-        icon: 'login',
-        title: 'Logout',
-        href: '/auth/login'
-    },
-    {
         icon: 'register',
         title: 'Product Info',
         href: '/info/productInfo'
@@ -63,7 +58,7 @@ const DrawerContent = () => {
                 {links.map((link) => (
                     <View key={link.href.toString()} style={{ paddingBottom: 5 }}>
                         <Pressable onPress={() => { toggleDrawer(); router.navigate(link.href) }}>
-                            <View style={{ gap: 10, flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, ...(link.href.toString().startsWith(pathname) ? { backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 100 } : {  }) }}>
+                            <View style={{ gap: 10, flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, ...(link.href.toString().startsWith(pathname) ? { backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 100 } : {}) }}>
                                 <Feather name={link.icon as any} size={24} style={{ marginTop: 10, marginLeft: 8 }} color={link.href.toString().startsWith(pathname) ? '#333' : 'white'} />
                                 <CText type='h2' style={{ padding: 10, ...(link.href.toString().startsWith(pathname) ? { color: '#333' } : { color: 'white' }) }}>{link.title}</CText>
                             </View>
@@ -71,7 +66,8 @@ const DrawerContent = () => {
                     </View>))}
             </View>
             <View style={{ position: 'absolute', bottom: 0, paddingBottom: insets.bottom }}>
-                {smallLinks.map((link) => (<View key={link.href.toString()} style={{ paddingBottom: 10 }}><Pressable onPress={() => { toggleDrawer(); router.navigate(link.href) }}><CText type='h3' style={{  }}>{link.title}</CText></Pressable></View>))}
+                <View key={'logout'} style={{ paddingBottom: 10 }}><Pressable onPress={() => { toggleDrawer(); router.dismissAll(); }}><CText type='h3' style={{}}>Logout</CText></Pressable></View>
+                {smallLinks.map((link) => (<View key={link.href.toString()} style={{ paddingBottom: 10 }}><Pressable onPress={() => { toggleDrawer(); router.navigate(link.href) }}><CText type='h3' style={{}}>{link.title}</CText></Pressable></View>))}
             </View>
         </View>
     );

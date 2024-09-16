@@ -6,7 +6,7 @@ import { Dimensions } from 'react-native';
 import { Redirect, router } from 'expo-router';
 
 export default function LoginPage() {
-    return <Redirect href={'/info/onboarding'} />;
+    return <Redirect href={'/onboarding'} />;
     
     // nfcManager.start();
 
