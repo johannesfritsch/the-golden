@@ -9,6 +9,8 @@ import React, { useState } from 'react'
 import { Modal, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Rive, { Alignment, Fit } from 'rive-react-native';
+import WaitlistForm from './form';
+import ModalLayout from '@/components/ModalLayout';
 
 const Waitlist = () => {
   const insets = useSafeAreaInsets();
@@ -30,10 +32,13 @@ const Waitlist = () => {
         <Button caption='Join the waitlist' onClick={() => setIsFormVisible(true)} />
       </BottomBar>
       <Modal visible={isFormVisible} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setIsFormVisible(false)}>
-        
+        <ModalLayout onClose={() => setIsFormVisible(false)}>
+          <WaitlistForm />
+        </ModalLayout>
       </Modal>
     </>
   )
 }
 
 export default Waitlist
+
