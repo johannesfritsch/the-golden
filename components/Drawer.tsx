@@ -57,13 +57,13 @@ const Drawer = ({ children }: DrawerProps) => {
     return (
         <DrawerContext.Provider value={{ drawerOpen: open, toggleDrawer }}>
             <Animated.View style={drawerStyle}>
-                <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 50 + insets.top, zIndex: 1000, backgroundColor: '#B29146' }}>
+                {/* <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 50 + insets.top, zIndex: 1000, backgroundColor: '#B29146' }}>
                     <View style={{ position: 'absolute', bottom: 10, left: 10 }}>
                         <Pressable style={{}} onPress={toggleDrawer}>
                             <AntDesign name='close' size={34} color='white' />
                         </Pressable>
                     </View>
-                </View>
+                </View> */}
                 <View style={{ paddingHorizontal: 40, paddingTop: 20 + insets.top + 35 }}>
                     <DrawerContent />
                 </View>

@@ -5,8 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Rive, { Alignment, Fit } from 'rive-react-native';
 import { useDrawer } from '@/utils/use-drawer';
 import { Feather } from '@expo/vector-icons';
+import { FeatherIcon } from '@/data/icons';
 
-export type Link = { icon: string, title: string, href: Href<string> };
+export type Link = { icon: FeatherIcon, title: string, href: Href<string> };
 
 const links: Link[] = [
     {
@@ -15,12 +16,12 @@ const links: Link[] = [
         href: '/events'
     },
     {
-        icon: 'home',
+        icon: 'heart',
         title: 'My Events',
         href: '/participations'
     },
     {
-        icon: 'home',
+        icon: 'message-square',
         title: 'Chat',
         href: '/chat'
     },

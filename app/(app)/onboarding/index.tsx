@@ -20,12 +20,6 @@ const Onboarding = () => {
         require('@/assets/videos/closeup-ring.mp4'),
     ]
 
-    useFocusEffect(
-        useCallback(() => {
-            return () => setTimeout(() => setCurrentSlide(0), 1000);
-        }, [])
-    );
-
     return (
         <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
             <View style={{ height: '50%', backgroundColor: '#CCC', marginBottom: -30 }}>
@@ -41,7 +35,7 @@ const Onboarding = () => {
                 borderTopStartRadius: 30,
             }}>
                 <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 20 }}>
-                    <View style={{  }}>
+                    <View style={{}}>
                         <PageControl currentPage={currentSlide} totalPages={5} onPagePress={(index) => {
                             setCurrentSlide(index);
                         }} />
@@ -51,7 +45,7 @@ const Onboarding = () => {
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 10 }}>Welcome to The Golden</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 10 }}>The Golden offers it's members an exclusive community defined by extraordinary venues, curated elegance, and a formidable selection of guests.</CText>
-                                <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>It’s where unique experiences and remarkable people come together for something truly unforgettable.</CText>                                
+                                <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>It’s where unique experiences and remarkable people come together for something truly unforgettable.</CText>
                                 <Button caption='More on our venues' onClick={() => {
                                     setCurrentSlide(1);
                                 }} />
