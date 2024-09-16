@@ -1304,6 +1304,8 @@ PODS:
     - React-Core
     - RiveRuntime (= 5.14.0)
   - RiveRuntime (5.14.0)
+  - RNCPicker (2.7.5):
+    - React-Core
   - RNGestureHandler (2.16.2):
     - DoubleConversion
     - glog
@@ -1459,6 +1461,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rive-react-native (from `../node_modules/rive-react-native`)
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1620,6 +1623,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   rive-react-native:
     :path: "../node_modules/rive-react-native"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
@@ -1708,6 +1713,7 @@ SPEC CHECKSUMS:
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
   rive-react-native: 9d724daa93efa3066e19e53960f83df5098cc112
   RiveRuntime: c470cc8daa0c192c678f7abb35b980f95d2bb625
+  RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e

@@ -32,7 +32,7 @@ const Login = () => {
 
     return (
         <Layout style={{ backgroundColor: '#B29146' }} topElement={<Header leftButton='back' rightButton='none' />} bottomElement={<ButtonBottomBar caption='Login using Aura' onClick={handleScanPress} />}>
-            <View style={{ marginBottom: 20 }}>
+            <View style={{ marginBottom: 20, marginTop: 30 }}>
                 <CText type="h1" style={{ textAlign: 'center' }}>Scan your Aura</CText>
             </View>
             <View style={{ marginBottom: 40 }}>
