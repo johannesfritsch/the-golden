@@ -14,7 +14,7 @@ export type DropdownProps = {
 
 const Dropdown = ({ value: currentValue, items, allowNull, onValueChange, style }: DropdownProps) => {
     const containerStyle = {
-        backgroundColor: currentValue != null ? '#666' : 'transparent',
+        backgroundColor: currentValue != null ? '#888' : 'transparent',
         borderRadius: 15,
         height: 45,
     }
@@ -26,14 +26,14 @@ const Dropdown = ({ value: currentValue, items, allowNull, onValueChange, style 
         color: 'white',
         height: 45,
         borderWidth: 1,
-        borderColor: '#666',
+        borderColor: currentValue != null ? '#888' : '#CCC',
         textAlign: 'center' as const,
         borderRadius: 15,
         paddingHorizontal: 15,
     };
 
     const placeholderStyle = {
-        color: currentValue != null ? 'white' : '#666',
+        color: currentValue != null ? 'white' : '#888',
     }
 
     return (

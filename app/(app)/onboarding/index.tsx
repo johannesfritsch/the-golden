@@ -22,7 +22,7 @@ const Onboarding = () => {
 
     return (
         <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
-            <View style={{ height: '50%', backgroundColor: '#CCC', marginBottom: -30 }}>
+            <View style={{ height: '50%', backgroundColor: '#EEE', marginBottom: -30 }}>
                 <Video allowsExternalPlayback={false} source={videos[currentSlide]} playInBackground={true} resizeMode='cover' repeat={true} style={{ width: '100%', height: '100%', zIndex: 100 }} />
             </View>
             <View style={{

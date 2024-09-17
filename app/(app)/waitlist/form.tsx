@@ -52,15 +52,15 @@ const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
                             <CText type='normal' style={{ marginBottom: 40 }}>We need some information to improve the experience for our future guests. Please fill out the form below. All data is handled according to European data protection laws.</CText>
 
                             <View style={{ marginBottom: 25 }}>
-                                <CText type='bold' style={{ marginBottom: 5 }}>Gender</CText>
+                                <CText type='bold' style={{ marginBottom: 10 }}>Gender</CText>
                                 <BoxSelector value={values.gender} items={genders} allowNull={true} onValueChange={handleChange('gender')} />
                             </View>
                             <View style={{ marginBottom: 25 }}>
-                                <CText type='bold' style={{ marginBottom: 5 }}>Age Group</CText>
+                                <CText type='bold' style={{ marginBottom: 10 }}>Age Group</CText>
                                 <BoxSelector value={values.ageGroup} items={ageGroups} allowNull={true} onValueChange={handleChange('ageGroup')} />
                             </View>
                             <View style={{ marginBottom: 25 }}>
-                                <CText type='bold' style={{ marginBottom: 5 }}>Country</CText>
+                                <CText type='bold' style={{ marginBottom: 10 }}>Country</CText>
                                 <Dropdown value={values.countryISO} items={Object.fromEntries(Object.entries(i18nCountries.countries).map(([value, label]) => ([value, Array.isArray(label) ? label[0] : label])))} allowNull={true} onValueChange={handleChange('countryISO')} />
                             </View>
                         </View>

@@ -17,18 +17,18 @@ const BoxSelector = ({ value: currentValue, items, allowNull, onValueChange, sty
                     <Pressable key={value} onPress={() => onValueChange(value)} style={{
                         height: 45,
                         borderWidth: 1,
-                        borderColor: '#666',
+                        borderColor: value === currentValue ? '#888' : '#CCC',
                         borderRadius: 15,
                         paddingHorizontal: 15,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: value === currentValue ? '#666' : 'white',
+                        backgroundColor: value === currentValue ? '#888' : 'white',
                     }}>
                         <CText type='normal' style={{
                             fontSize: 16,
                             lineHeight: 21,
                             fontFamily: 'RobotoRegular',
-                            color: value === currentValue ? '#FFF' : '#666',
+                            color: value === currentValue ? '#FFF' : '#888',
                         }}>{label}</CText>
                     </Pressable>
                 </View>
