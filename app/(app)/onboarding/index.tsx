@@ -78,7 +78,7 @@ const Onboarding = () => {
                             </ContentSlider.Item>
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 20 }}>Already got an Aura?</CText>
-                                <CText type='normal' style={{ textAlign: 'center', marginBottom: 10 }}>Auras are your key to the exclusive world of The Golden.</CText>
+                                <CText type='normal' style={{ textAlign: 'center', marginBottom: 10 }}>Auras are your key to the world of The Golden's exclusive events.</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>They are exquisite jewelry pieces, seamlessly integrated with ultra-secure NFC technology.</CText>
                                 <Button style={{ marginBottom: 20 }} caption='I have my Aura' onClick={() => {
                                     router.navigate('/auth/login');

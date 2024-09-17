@@ -13,34 +13,34 @@ const CText = ({ children, type, style: additionalStyle = {} }: CTextProps) => {
             ...(type === 'h1' ? {
                 fontSize: 28,
                 lineHeight: 38,
-                fontFamily: 'RobotoMedium',
+                fontFamily: 'DMSerifDisplay',
             } : type === 'h2' ? {
-                fontSize: 22,
+                fontSize: 23,
                 fontFamily: 'RobotoMedium',
             } : type === 'h3' ? {
-                fontSize: 17,
+                fontSize: 18,
                 fontFamily: 'RobotoMedium',
             } : type === 'normal' ? {
-                fontSize: 14,
+                fontSize: 15,
                 lineHeight: 21,
                 fontFamily: 'RobotoRegular',
                 color: '#666',
             } : type === 'bold' ? {
-                fontSize: 14,
+                fontSize: 15,
                 lineHeight: 21,
                 fontFamily: 'RobotoMedium',
                 color: '#666',
             } : type === 'italic' ? {
-                fontSize: 14,
+                fontSize: 15,
                 lineHeight: 21,
                 fontFamily: 'RobotoItalic',
             } : type === 'underline' ? {
-                fontSize: 14,
+                fontSize: 15,
                 lineHeight: 21,
                 fontFamily: 'RobotoRegular',
                 textDecorationLine: 'underline',
             } : type === 'boldunderline' ? {
-                fontSize: 14,
+                fontSize: 15,
                 lineHeight: 21,
                 fontFamily: 'RobotoMedium',
                 textDecorationLine: 'underline',

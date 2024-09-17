@@ -1,29 +1,32 @@
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { ReactNode } from 'react'
+import LoadingLayer from './LoadingLayer'
 
-export type LayoutPropsProps = {
+export type LayoutProps = {
   children: ReactNode
   topElement?: ReactNode
   header?: ReactNode
   footer?: ReactNode
   bottomElement?: ReactNode
   style?: StyleProp<ViewStyle>
+  loading?: boolean
 }
 
-const LayoutProps = ({ children, topElement, header,footer, bottomElement, style }: LayoutPropsProps) => {
+const Layout = ({ children, topElement, header, footer, bottomElement, style, loading = false }: LayoutProps) => {
   return (
-    <View style={[style, { height: '100%' }]}>
+    <View style={[style, { height: '100%', backgroundColor: 'white' }]}>
       {topElement}
-      <ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
+      {loading && <View style={{ flexGrow: 1, paddingBottom: 90 }}><LoadingLayer /></View>}
+      {!loading && (<ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
         {header}
         <View style={{ padding: 20 }}>
           {children}
         </View>
         {footer || <View style={{ height: 90 }} />}
-      </ScrollView>
-      {bottomElement}
+      </ScrollView>)}
+      {!loading && bottomElement}
     </View>
   )
 }
 
-export default LayoutProps
+export default Layout
