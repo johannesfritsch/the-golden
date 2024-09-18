@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 export type ContentSliderProps = {
