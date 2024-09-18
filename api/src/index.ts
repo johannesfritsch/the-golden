@@ -2,6 +2,9 @@ import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
 import { z } from 'zod';
+import { config } from 'dotenv';
+
+config();
 
 // created for each request
 const createContext = ({
@@ -13,7 +16,7 @@ const t = initTRPC.context<Context>().create();
 const appRouter = t.router({
     getWaitlistStatus: t.procedure.input(z.string()).query(async (opts) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        return { waitlistEntered: true, waitlistPosition: 1234 };
+        return { waitlistEntered: true, waitlistPosition: 2345 };
     }),
 });
 const app = express();
@@ -24,8 +27,8 @@ app.use(
         createContext,
     }),
 );
-app.listen(4000, () => {
-    console.log('Listening on http://localhost:4000');
+app.listen(parseInt(process.env.PORT as string), () => {
+    console.log('Listening on http://localhost:' + process.env.PORT);
 });
 
 export type AppRouter = typeof appRouter;

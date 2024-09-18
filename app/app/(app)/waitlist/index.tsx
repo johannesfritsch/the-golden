@@ -13,12 +13,12 @@ const WaitlistStatus = () => {
     const { isPending, isFetching, error, data } = trpc.getWaitlistStatus.useQuery("test");
 
     return (
-        <Layout loading={isPending || isFetching} topElement={<Header leftButton='back' rightButton='none' />} bottomElement={(data?.waitlistEntered && <BottomBar><Button caption='Skip through the waitlist' onClick={() => { }} /></BottomBar>)}>
+        <Layout loading={isPending || isFetching} topElement={<Header leftButton='back' rightButton='none' />} bottomElement={(data?.waitlistEntered && <BottomBar><Button caption='Tired of waiting?' onClick={() => { }} /></BottomBar>)}>
             {error && <CText type='h1'>An error has occurred: {error.message}</CText>}
             {!isPending && !isFetching && !error && data && (
                 <View>
                     {!data.waitlistEntered && <Redirect href='/waitlist/info' />}
-                    {data.waitlistEntered  && <CText type={'normal'}>{data.waitlistPosition}</CText>}
+                    {data.waitlistEntered && <CText type={'normal'}>{data.waitlistPosition}</CText>}
                 </View>
             )}
         </Layout>
