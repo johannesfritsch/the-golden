@@ -13,8 +13,8 @@ const BoxSelector = ({ value: currentValue, items, allowNull, onValueChange, sty
     return (
         <View style={[style, { flexDirection: 'row', gap: 10, flexWrap: "wrap" }]}>
             {Object.entries(items).map(([value, label]) => (
-                <View style={{ flexGrow: 1 }}>
-                    <Pressable key={value} onPress={() => onValueChange(value)} style={{
+                <View key={value} style={{ flexGrow: 1 }}>
+                    <Pressable onPress={() => onValueChange(value)} style={{
                         height: 45,
                         borderWidth: 1,
                         borderColor: value === currentValue ? '#888' : '#CCC',

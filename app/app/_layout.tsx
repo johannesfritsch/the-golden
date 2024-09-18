@@ -13,7 +13,6 @@ import {
 } from '@tanstack/react-query'
 import { trpc } from '@/utils/trpc';
 import { httpBatchLink } from '@trpc/client';
-import Config from "react-native-config";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -23,7 +22,8 @@ const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: Config.TRPC_BASE_URL,
+      // url: 'https://api.thegolden.events/trpc',
+      url: 'http://192.168.0.142:4000/trpc',
       // You can pass any HTTP headers you wish here
       async headers() {
         return {
