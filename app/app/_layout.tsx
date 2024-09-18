@@ -13,9 +13,14 @@ import {
 } from '@tanstack/react-query'
 import { trpc } from '@/utils/trpc';
 import { httpBatchLink } from '@trpc/client';
-
+// import { RSA } from 'react-native-rsa-native';
+// RSA.generateKeys(4096).then((keys) => {
+//   console.log('keys', keys);
+// });
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+
 
 const queryClient = new QueryClient();
 

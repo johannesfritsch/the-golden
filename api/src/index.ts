@@ -18,7 +18,7 @@ const t = initTRPC.context<Context>().create();
 const appRouter = t.router({
     getWaitlistStatus: t.procedure.input(z.string()).query(async (opts) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        return { waitlistEntered: false, waitlistPosition: 1234 };
+        return { waitlistEntered: true, waitlistPosition: 1234 };
     }),
 });
 

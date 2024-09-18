@@ -5,24 +5,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "workspaces": {
-    "packages": [
-      "app",
-      "api"
-    ],
-    "nohoist": [
-      "**/react-native",
-      "**/react-native/**",
-      "**/metro-core",
-      "**/metro-core/**",
-      "**/@expo",
-      "**/@expo/**",
-      "**/expo",
-      "**/expo/**",
-      "**/@ui-kitten",
-      "**/@ui-kitten/**"
-    ]
-  },
   "author": "",
   "license": "ISC",
   "description": ""
