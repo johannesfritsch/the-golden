@@ -6,6 +6,8 @@ import { config } from 'dotenv';
 
 config();
 
+console.log('APP_PRIVATE_KEY', process.env.APP_PRIVATE_KEY);
+
 // created for each request
 const createContext = ({
     req,
@@ -16,9 +18,13 @@ type Context = Awaited<ReturnType<typeof createContext>>;
 const t = initTRPC.context<Context>().create();
 
 const appRouter = t.router({
+    getAppKeyChallenge: t.procedure.input(z.string()).query(async (opts) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return { challenge: '1234' };
+    }),
     getWaitlistStatus: t.procedure.input(z.string()).query(async (opts) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        return { waitlistEntered: true, waitlistPosition: 1234 };
+        return { waitlistEntered: true, waitlistPosition: Math.round(Math.random() * 10000) };
     }),
 });
 

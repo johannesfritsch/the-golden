@@ -13,14 +13,9 @@ import {
 } from '@tanstack/react-query'
 import { trpc } from '@/utils/trpc';
 import { httpBatchLink } from '@trpc/client';
-// import { RSA } from 'react-native-rsa-native';
-// RSA.generateKeys(4096).then((keys) => {
-//   console.log('keys', keys);
-// });
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-
 
 const queryClient = new QueryClient();
 
@@ -28,7 +23,7 @@ const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
       // url: 'https://api.thegolden.events/trpc',
-      url: 'http://192.168.0.142:4000/trpc',
+      url: 'http://172.20.10.3:4000/trpc',
       // You can pass any HTTP headers you wish here
       async headers() {
         return {

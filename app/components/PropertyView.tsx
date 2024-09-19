@@ -1,17 +1,18 @@
 import { Feather } from "@expo/vector-icons"
-import { View } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import CText from "./CText"
 import { FeatherIcon } from "@/data/icons"
 
 export type PropertyViewProps = {
     icon: FeatherIcon,
     title: string,
-    description: string
+    description: string,
+    style?: StyleProp<ViewStyle>,
 }
 
-export const PropertyView = ({ icon, title, description }: PropertyViewProps) => {
+export const PropertyView = ({ icon, title, description, style }: PropertyViewProps) => {
     return (
-        <View key={title} style={{ justifyContent: 'space-between', gap: 30, flexDirection: 'row' }}>
+        <View key={title} style={[style, { justifyContent: 'space-between', gap: 30, flexDirection: 'row' }]}>
             <View style={{}}>
                 <Feather name={icon as any} size={35} color="#B49146" />
             </View>

@@ -1,7 +1,7 @@
 import BottomBar from '@/components/BottomBar';
 import Button from '@/components/Button';
 import CText from '@/components/CText'
-import { PropertyView } from '@/components/EventProperty';
+import { PropertyView } from '@/components/PropertyView';
 import Header from '@/components/Header';
 import Layout from '@/components/Layout';
 import React, { useState } from 'react'

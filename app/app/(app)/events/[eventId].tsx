@@ -1,6 +1,6 @@
 import CText from "@/components/CText"
 import EventGallery from "@/components/EventGallery"
-import { PropertyView } from "@/components/EventProperty"
+import { PropertyView } from "@/components/PropertyView"
 import Header from "@/components/Header"
 import Layout from "@/components/Layout"
 import ModalLayout from "@/components/ModalLayout"
