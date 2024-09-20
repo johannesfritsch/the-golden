@@ -39,6 +39,8 @@ export type ContentSliderItemProps = {
 }
 
 ContentSlider.Item = ({ children }: ContentSliderItemProps) => {
+    
+
     return (
         <View style={{ justifyContent: 'flex-start', width: '100%' }}>
             {children}

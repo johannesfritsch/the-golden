@@ -12,22 +12,52 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { trpc } from '@/utils/trpc';
-import { httpBatchLink } from '@trpc/client';
+import { httpLink } from '@trpc/client';
+import { getAndroidId, getBuildNumber, getDeviceId, getDeviceToken, getDeviceType, getInstanceId, getManufacturer, getSystemName, getSystemVersion, getUniqueId, getVersion, isTablet } from 'react-native-device-info'
+import rsa, { Hash } from 'react-native-fast-rsa'
+import { appKey } from '@/utils/appKey';
+import { Buffer } from 'buffer';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      retry: false,
+    },
+  },
+});
 
 const trpcClient = trpc.createClient({
   links: [
-    httpBatchLink({
+    httpLink({
       // url: 'https://api.thegolden.events/trpc',
-      url: 'http://172.20.10.3:4000/trpc',
+      url: 'http://192.168.0.142:4000/trpc',
       // You can pass any HTTP headers you wish here
       async headers() {
+        const uniqueId = await getUniqueId();
+        const nowString = new Date().toISOString();
+        const encryptedStr = await rsa.encryptOAEP(`${uniqueId} | ${nowString}`, '', Hash.SHA256, appKey);
+
         return {
-          authorization: 'Bearer 123',
+          'x-unique-id': uniqueId,
+          'x-device-time': nowString,
+          'x-device-sign': encryptedStr,
+          'x-device-id': getDeviceId(),
+          'x-build-version': getVersion(),
+          'x-build-number': getBuildNumber(),
+          'x-instance-id': await getInstanceId(),
+          'x-android-id': await getAndroidId(),
+          'x-device-token': await getDeviceToken().catch(() => 'unknown'),
+          'x-manufacturer': await getManufacturer(),
+          'x-system-name': getSystemName(),
+          'x-system-version': getSystemVersion(),
+          'x-is-tablet': isTablet() ? 'true' : 'false',
+          'x-device-type': await getDeviceType(),
+          'x-build-type': __DEV__ ? 'development' : 'production',
         };
       },
     }),
