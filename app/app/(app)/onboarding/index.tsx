@@ -2,7 +2,7 @@ import Button from '@/components/Button'
 import CText from '@/components/CText'
 import PageControl from '@/components/PageControl'
 import { router } from 'expo-router'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Dimensions, PanResponder, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ContentSlider from '@/components/ContentSlider'
@@ -18,10 +18,30 @@ const videos = [
 
 const Onboarding = () => {
     const insets = useSafeAreaInsets();
-    const [currentSlide, setCurrentSlide] = useState(0);  
-    
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [handled, setHandled] = useState(false);
+
+    const panResponder = useMemo(() => {
+        return PanResponder.create({
+            onPanResponderGrant: () => {
+                setHandled(false);
+            },
+            onMoveShouldSetPanResponder: (evt, gestureState) => true,
+            onPanResponderMove: (evt, gestureState) => {
+                if (handled) return;
+                if (gestureState.dx > 50 && currentSlide > 0) {
+                    setCurrentSlide(currentSlide - 1);
+                    setHandled(true);
+                } else if (gestureState.dx < -50 && currentSlide < 4) {
+                    setCurrentSlide(currentSlide + 1);
+                    setHandled(true);
+                }
+            },
+        })
+    }, [handled, currentSlide]);
+
     return (
-        <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
+        <View {...panResponder.panHandlers} style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
             <View style={{ height: '50%', backgroundColor: '#000', marginBottom: -30 }}>
                 <VideoPlayer source={videos[currentSlide]} />
             </View>
