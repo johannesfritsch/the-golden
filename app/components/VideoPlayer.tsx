@@ -10,7 +10,6 @@ export type VideoPlayerProps = {
 const VideoPlayer = ({ source }: VideoPlayerProps) => {
     const [currentSource, setCurrentSource] = useState<any>(source);
     const opacity = useSharedValue(1.0);
-    const transitionDuration = 250;
 
     const overlayStyles = useAnimatedStyle(() => ({
         width: '100%',
@@ -18,23 +17,21 @@ const VideoPlayer = ({ source }: VideoPlayerProps) => {
         position: 'absolute',
         top: 0,
         left: 0,
-        backgroundColor: 'white',
+        backgroundColor: 'black',
         zIndex: 101,
         opacity: opacity.value,
     }));
 
     useEffect(() => {
         if (!source) return;
-        console.log('useEffect');
-        opacity.value = withTiming(1.0, { duration: transitionDuration, easing: Easing.elastic(0.2) });
+        opacity.value = withTiming(1.0, { duration: 300, easing: Easing.elastic(0.2) });
         setTimeout(() => {
             setCurrentSource(source);
-        }, transitionDuration);
+        }, 300);
     }, [source]);
 
     const handleVideoLoad = () => {
-        console.log('handleVideoLoad');
-        opacity.value = withTiming(0.0, { duration: transitionDuration, easing: Easing.elastic(0.2) });
+        opacity.value = withTiming(0.0, { duration: 1250, easing: Easing.elastic(0.2) });
     }
 
     return (

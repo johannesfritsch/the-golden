@@ -1,26 +1,25 @@
 import Button from '@/components/Button'
 import CText from '@/components/CText'
 import PageControl from '@/components/PageControl'
-import { router, useFocusEffect } from 'expo-router'
-import { useCallback, useState } from 'react'
-import { Dimensions, Pressable, View } from 'react-native'
+import { router } from 'expo-router'
+import { useRef, useState } from 'react'
+import { Dimensions, PanResponder, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Video from 'react-native-video'
 import ContentSlider from '@/components/ContentSlider'
-import { Feather } from '@expo/vector-icons'
 import VideoPlayer from '@/components/VideoPlayer'
+
+const videos = [
+    require('@/assets/videos/closeup-arm-wrist.mp4'),
+    require('@/assets/videos/outside-of-house.mp4'),
+    require('@/assets/videos/man-drinking-coffee.mp4'),
+    require('@/assets/videos/woman-on-stairs.mp4'),
+    require('@/assets/videos/closeup-ring.mp4'),
+];
 
 const Onboarding = () => {
     const insets = useSafeAreaInsets();
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const videos = [
-        require('@/assets/videos/closeup-arm-wrist.mp4'),
-        require('@/assets/videos/outside-of-house.mp4'),
-        require('@/assets/videos/man-drinking-coffee.mp4'),
-        require('@/assets/videos/woman-on-stairs.mp4'),
-        require('@/assets/videos/closeup-ring.mp4'),
-    ]
-
+    const [currentSlide, setCurrentSlide] = useState(0);  
+    
     return (
         <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
             <View style={{ height: '50%', backgroundColor: '#000', marginBottom: -30 }}>
