@@ -4,6 +4,7 @@ import express from 'express';
 import { z } from 'zod';
 import { config } from 'dotenv';
 import { privateDecrypt, constants } from 'crypto';
+import { createDeviceStore } from './store.js';
 
 config();
 
@@ -13,11 +14,18 @@ console.log('APP_PRIVATE_KEY', process.env.APP_PRIVATE_KEY);
 const createContext = async ({
     req,
     res,
-}: trpcExpress.CreateExpressContextOptions) => ({
-    currentDevice: await loadDevice(req),
-});
+}: trpcExpress.CreateExpressContextOptions) => {
+    const deviceId = await verifyDeviceId(req);
+    const deviceStore = createDeviceStore(deviceId);
+    return {
+        currentDevice: {
+            id: deviceId,
+            store: deviceStore,
+        },
+    };
+}
 
-const loadDevice = async (req: express.Request) => {
+const verifyDeviceId = async (req: express.Request) => {
     if (req.headers['x-device-sign'] && req.headers['x-device-time'] && req.headers['x-unique-id']) {
         const base64str = req.headers['x-device-sign'].toString();
         const datetime = req.headers['x-device-time'].toString();
@@ -36,9 +44,7 @@ const loadDevice = async (req: express.Request) => {
 
             if (decryptedUniqueId === uniqueId && decryptedDatetime === datetime) {
                 console.log('Device authorized', uniqueId);
-                return {
-                    id: uniqueId,
-                }
+                return uniqueId;
             } else {
                 throw new TRPCError({
                     code: 'UNAUTHORIZED',
@@ -66,7 +72,7 @@ const t = initTRPC.context<Context>().create();
 
 const appRouter = t.router({
     getWaitlistStatus: t.procedure.input(z.string()).query(async ({ ctx: { currentDevice } }) => {
-        return { waitlistEntered: true, waitlistPosition: Math.round(Math.random() * 10000), estimatedTimeRemaining: Math.round((1 + (14 * Math.random())) * 24 * 60 * 60 * 1000) };
+        return currentDevice.store.getWaitlistStatus();
     }),
 });
 

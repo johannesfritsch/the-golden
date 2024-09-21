@@ -16,7 +16,6 @@ import { httpLink } from '@trpc/client';
 import { getAndroidId, getBuildNumber, getDeviceId, getDeviceToken, getDeviceType, getInstanceId, getManufacturer, getSystemName, getSystemVersion, getUniqueId, getVersion, isTablet } from 'react-native-device-info'
 import rsa, { Hash } from 'react-native-fast-rsa'
 import { appKey } from '@/utils/appKey';
-import { Buffer } from 'buffer';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -35,7 +34,7 @@ const trpcClient = trpc.createClient({
   links: [
     httpLink({
       // url: 'https://api.thegolden.events/trpc',
-      url: 'http://192.168.0.142:4000/trpc',
+      url: 'http://172.20.10.3:4000/trpc',
       // You can pass any HTTP headers you wish here
       async headers() {
         const uniqueId = await getUniqueId();

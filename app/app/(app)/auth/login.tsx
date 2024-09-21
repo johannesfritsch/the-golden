@@ -4,30 +4,49 @@ import Layout from '@/components/Layout'
 import { router } from 'expo-router'
 import { Dimensions, Pressable, View } from 'react-native'
 import nfcManager, { NfcTech } from 'react-native-nfc-manager'
-import Rive, { Alignment, Fit } from 'rive-react-native'
 import { Image } from 'expo-image'
 import Header from '@/components/Header'
+import Ntag424 from 'react-native-ntag-424'
 
 const Login = () => {
     const deviceWidth = Dimensions.get('window').width;
 
-    nfcManager.start();
-
     const handleScanPress = async () => {
+        const ntag424 = new Ntag424(nfcManager);
 
-        try {
-            await nfcManager.requestTechnology(NfcTech.Ndef, {
-                alertMessage: 'Please scan your Aura bracelet,\nnecklace, or ring now.',
-            });
+        // begin NFC scan
+        await ntag424.initiate();
 
-            await nfcManager.getTag();
+        // select application/DF level
+        await ntag424.selectFile('application');
 
-            router.navigate('/events');
-        } catch (error) {
+        // authenticate into key slot #0 using the default key (16 zero bytes)
+        await ntag424.authenticateEv2First(0, Buffer.alloc(16));
 
-        } finally {
-            await nfcManager.cancelTechnologyRequest();
-        }
+        // retrieve card UID
+        const uid = await ntag424.getCardUid();
+        console.log('uid', uid);
+
+        // end NFC scan
+        await ntag424.terminate();
+
+        router.navigate('/events');
+
+        // try {
+        //     await nfcManager.start();
+
+        //     await nfcManager.requestTechnology(NfcTech.Ndef, {
+        //         alertMessage: 'Please scan your Aura bracelet,\nnecklace, or ring now.',
+        //     });
+
+        //     await nfcManager.getTag();
+
+        //     router.navigate('/events');
+        // } catch (error) {
+
+        // } finally {
+        //     await nfcManager.cancelTechnologyRequest();
+        // }
     }
 
     return (
