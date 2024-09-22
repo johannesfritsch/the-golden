@@ -40,6 +40,12 @@ export interface Devices {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface LoginSessions {
+  cardUid: string;
+  createdAt: Generated<Timestamp>;
+  randA: string;
+}
+
 export interface WaitlistMembers {
   ageGroup: WaitlistAgeGroup;
   country: string;
@@ -52,5 +58,6 @@ export interface WaitlistMembers {
 export interface DB {
   device_checkins: DeviceCheckins;
   devices: Devices;
+  login_sessions: LoginSessions;
   waitlist_members: WaitlistMembers;
 }

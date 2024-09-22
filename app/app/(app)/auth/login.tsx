@@ -8,61 +8,33 @@ import { Image } from 'expo-image'
 import Header from '@/components/Header'
 import { NfcAuth } from '@/utils/nfc'
 import { Buffer } from 'buffer';
-import { decrypt } from 'react-native-ntag-424/src/services/crypto'
 import { trpc } from '@/utils/trpc'
 
 
 const Login = () => {
     const deviceWidth = Dimensions.get('window').width;
-    const { mutateAsync: loginWithNfcAsync } = trpc.loginWithNfc.useMutation();
+    const { mutateAsync: loginWithNfcPartOneAsync } = trpc.loginWithNfcPartOne.useMutation();
+    const { mutateAsync: loginWithNfcPartTwoAsync } = trpc.loginWithNfcPartTwo.useMutation();
 
     const handleScanPress = async () => {
         const authenticator = new NfcAuth(nfcManager);
 
-        await authenticator.initiate();
-        await authenticator.selectApplicationFile();
+        try {
+            await authenticator.initiate();
+            await authenticator.selectApplicationFile();
 
-        const randBEncrypted = await authenticator.authenticateEv2FirstPartOne(0);
-        const serverResponse = await loginWithNfcAsync(Buffer.from(randBEncrypted).toString('hex'));
+            const randBEncrypted = await authenticator.authenticateEv2FirstPartOne(0);
 
-        const partTwoEncrypted = await authenticator.authenticateEv2FirstPartTwo(Array.from(new Uint8Array(Buffer.from(serverResponse.result, 'hex'))));
-        
+            const serverResponse = await loginWithNfcPartOneAsync({ cardUid: Buffer.from('0123456789ABCD', 'hex').toString('hex'), bytes: Buffer.from(randBEncrypted).toString('hex') });
 
-        await authenticator.terminate();
+            const partTwoEncrypted = await authenticator.authenticateEv2FirstPartTwo(Array.from(new Uint8Array(Buffer.from(serverResponse.result, 'hex'))));
+            const serverResponse2 = await loginWithNfcPartTwoAsync({ cardUid: Buffer.from('0123456789ABCD', 'hex').toString('hex'), bytes: Buffer.from(partTwoEncrypted).toString('hex') });
+            console.log('------> serverResponse2.token', serverResponse2.token);
+        } catch (error) {
 
-        // // begin NFC scan
-        // await ntag424.initiate();
-
-        // // // select application/DF level
-        // await ntag424.selectFile('application');
-
-        // // // authenticate into key slot #0 using the default key (16 zero bytes)
-        // await ntag424.authenticateEv2First(0, Buffer.alloc(16));
-
-        // // // retrieve card UID
-        // const uid = await ntag424.getCardUid();
-        // console.log('uid', uid);
-
-        // // // end NFC scan
-        // await ntag424.terminate();
-
-        // router.navigate('/events');
-
-        // try {
-        //     await nfcManager.start();
-
-        //     await nfcManager.requestTechnology(NfcTech.Ndef, {
-        //         alertMessage: 'Please scan your Aura bracelet,\nnecklace, or ring now.',
-        //     });
-
-        //     await nfcManager.getTag();
-
-        //     router.navigate('/events');
-        // } catch (error) {
-
-        // } finally {
-        //     await nfcManager.cancelTechnologyRequest();
-        // }
+        } finally {
+            await authenticator.terminate();
+        }
     }
 
     return (
