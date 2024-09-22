@@ -3,34 +3,50 @@ import CText from '@/components/CText'
 import Layout from '@/components/Layout'
 import { router } from 'expo-router'
 import { Dimensions, Pressable, View } from 'react-native'
-import nfcManager, { NfcTech } from 'react-native-nfc-manager'
+import nfcManager from 'react-native-nfc-manager'
 import { Image } from 'expo-image'
 import Header from '@/components/Header'
-import Ntag424 from 'react-native-ntag-424'
+import { NfcAuth } from '@/utils/nfc'
+import { Buffer } from 'buffer';
+import { decrypt } from 'react-native-ntag-424/src/services/crypto'
+import { trpc } from '@/utils/trpc'
+
 
 const Login = () => {
     const deviceWidth = Dimensions.get('window').width;
+    const { mutateAsync: loginWithNfcAsync } = trpc.loginWithNfc.useMutation();
 
     const handleScanPress = async () => {
-        const ntag424 = new Ntag424(nfcManager);
+        const authenticator = new NfcAuth(nfcManager);
 
-        // begin NFC scan
-        await ntag424.initiate();
+        await authenticator.initiate();
+        await authenticator.selectApplicationFile();
 
-        // select application/DF level
-        await ntag424.selectFile('application');
+        const randBEncrypted = await authenticator.authenticateEv2FirstPartOne(0);
+        const serverResponse = await loginWithNfcAsync(Buffer.from(randBEncrypted).toString('hex'));
 
-        // authenticate into key slot #0 using the default key (16 zero bytes)
-        await ntag424.authenticateEv2First(0, Buffer.alloc(16));
+        const partTwoEncrypted = await authenticator.authenticateEv2FirstPartTwo(Array.from(new Uint8Array(Buffer.from(serverResponse.result, 'hex'))));
+        
 
-        // retrieve card UID
-        const uid = await ntag424.getCardUid();
-        console.log('uid', uid);
+        await authenticator.terminate();
 
-        // end NFC scan
-        await ntag424.terminate();
+        // // begin NFC scan
+        // await ntag424.initiate();
 
-        router.navigate('/events');
+        // // // select application/DF level
+        // await ntag424.selectFile('application');
+
+        // // // authenticate into key slot #0 using the default key (16 zero bytes)
+        // await ntag424.authenticateEv2First(0, Buffer.alloc(16));
+
+        // // // retrieve card UID
+        // const uid = await ntag424.getCardUid();
+        // console.log('uid', uid);
+
+        // // // end NFC scan
+        // await ntag424.terminate();
+
+        // router.navigate('/events');
 
         // try {
         //     await nfcManager.start();

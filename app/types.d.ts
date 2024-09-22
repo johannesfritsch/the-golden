@@ -8,3 +8,8 @@ declare module 'react-native-ntag-424' {
         terminate(): Promise<void>;
     }
 }
+
+declare module 'crypto-browserify' {
+    export const createCipheriv: any;
+    export const createDecipheriv: any;
+}
