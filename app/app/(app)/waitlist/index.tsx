@@ -21,7 +21,11 @@ const WaitlistStatus = () => {
     const [codeModalOpen, setCodeModalOpen] = useState(false);
 
     useEffect(() => {
+        console.log('useEffect', riveRef, riveRef.current, data, data?.waitlistEntered);
+
         if (!riveRef || !riveRef.current || !data || !data.waitlistEntered) return;
+
+        console.log('setting numbers');
 
         const num1 = Math.floor(data.waitlistPosition / 1000);
         const num2 = Math.floor((data.waitlistPosition % 1000) / 100);
@@ -41,7 +45,7 @@ const WaitlistStatus = () => {
             riveRef.current?.setInputStateAtPath('number', num4, 'number4');
         }, 200);
 
-    }, [data, riveRef]);
+    }, [data, riveRef, isFetching]);
 
     return (
         <Layout loading={isPending || isFetching} error={error || undefined} topElement={<Header leftButton='back' rightButton='none' />} bottomElement={(data?.waitlistEntered && <BottomBar><Button caption='Tired of waiting?' onClick={() => setReferralModalOpen(true)} /></BottomBar>)}>

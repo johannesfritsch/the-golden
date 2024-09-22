@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: thegolden
+      POSTGRES_PASSWORD: thegolden
+      POSTGRES_DB: thegolden
+    ports:
+      - "5432:5432"
