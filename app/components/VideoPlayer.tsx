@@ -37,7 +37,7 @@ const VideoPlayer = ({ source }: VideoPlayerProps) => {
     return (
         <View>
             <Animated.View style={overlayStyles}></Animated.View>
-            <Video onLoad={handleVideoLoad} allowsExternalPlayback={false} source={currentSource} playInBackground={true} resizeMode='cover' repeat={true} style={{ width: '100%', height: '100%', zIndex: 100 }} />
+            <Video onPlaybackStateChanged={handleVideoLoad} allowsExternalPlayback={false} source={currentSource} playInBackground={true} resizeMode='cover' repeat={true} style={{ width: '100%', height: '100%', zIndex: 100 }} />
         </View>
     )
 }
