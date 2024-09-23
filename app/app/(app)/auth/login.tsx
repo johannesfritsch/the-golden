@@ -3,14 +3,14 @@ import CText from '@/components/CText'
 import { NfcAuth } from '@/utils/nfc'
 import { trpc } from '@/utils/trpc'
 import { router } from 'expo-router'
-import { Dimensions, Pressable, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import nfcManager from 'react-native-nfc-manager'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { decrypt, crc32 } from 'react-native-ntag-424/src/services/crypto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Rive from 'rive-react-native'
 
-const LockScreen = () => {
+const Login = () => {
     const insets = useSafeAreaInsets();
     const { mutateAsync: loginWithNfcPartOneAsync } = trpc.loginWithNfcPartOne.useMutation();
     const { mutateAsync: loginWithNfcPartTwoAsync } = trpc.loginWithNfcPartTwo.useMutation();
@@ -33,11 +33,12 @@ const LockScreen = () => {
             const serverResponse2 = await loginWithNfcPartTwoAsync({ cardUid: Buffer.from(cardUid, 'hex').toString('hex'), bytes: Buffer.from(partTwoEncrypted).toString('hex') });
             console.log('------> serverResponse2.token', serverResponse2.token);
 
-            const decryptionKeyFromPin = crc32(Buffer.from('123456'));
+            const decryptionKeyFromPin = crc32(Buffer.from('12345678', 'hex'));
+
             const decryptedToken = decrypt(Buffer.from(serverResponse2.token, 'hex'), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc');
             console.log('------> decryptedToken', decryptedToken.toString('utf8'));
 
-            if (/^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(decryptedToken.toString('utf8'))) {
+            if (/^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(decryptedToken.toString('utf8').trim())) {
                 await AsyncStorage.setItem('token', decryptedToken.toString('utf8'));
                 router.back();
             } else {
@@ -72,4 +73,4 @@ const LockScreen = () => {
     );
 }
 
-export default LockScreen
+export default Login

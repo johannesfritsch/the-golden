@@ -1,4 +1,4 @@
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
+import { RefreshControl, ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { ReactNode } from 'react'
 import LoadingLayer from './LoadingLayer'
 import CText from './CText'
@@ -13,9 +13,10 @@ export type LayoutProps = {
   style?: StyleProp<ViewStyle>
   loading?: boolean
   error?: { message: string }
+  refetch?: () => void
 }
 
-const Layout = ({ children, topElement, header, footer, bottomElement, style, loading = false, error }: LayoutProps) => {
+const Layout = ({ children, topElement, header, footer, bottomElement, style, loading = false, error, refetch = () => {} }: LayoutProps) => {
   return (
     <View style={[style, { height: '100%', backgroundColor: 'white' }]}>
       {topElement}
@@ -29,6 +30,7 @@ const Layout = ({ children, topElement, header, footer, bottomElement, style, lo
       )}
       {!loading && !error && (
         <ScrollView style={{ flexGrow: 1, backgroundColor: 'white' }}>
+          <RefreshControl refreshing={loading} onRefresh={refetch} />
           {header}
           <View style={{ padding: 20 }}>
             {children}

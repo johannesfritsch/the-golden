@@ -7,9 +7,10 @@ import { sampleEvents } from "@/data/event";
 import { trpc } from "@/utils/trpc";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
+import { RefreshControl } from "react-native";
 
 const EventList = () => {
-    const { error, data, refetch } = trpc.getEvents.useQuery();
+    const { data, error, isFetching, refetch, failureReason, ...rest } = trpc.getEvents.useQuery();
 
     useFocusEffect(
         useCallback(() => {
@@ -19,9 +20,7 @@ const EventList = () => {
     );
 
     return (
-        <Layout topElement={<Header leftButton='menu' rightButton='auth' />} bottomElement={<TabBar />}>
-            <CText type="normal" style={{ textAlign: 'center', marginTop: 30 }}>{error?.message}</CText>
-            <CText type="normal" style={{ textAlign: 'center', marginTop: 40, marginBottom: 20 }}>{JSON.stringify(data)}</CText>
+        <Layout topElement={<Header leftButton='menu' rightButton='auth' />} bottomElement={<TabBar />} loading={!!error || isFetching} refetch={refetch}>
             {sampleEvents.map(event => (
                 <EventCard key={event.id} event={event} />
             ))}

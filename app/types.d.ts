@@ -9,7 +9,7 @@ declare module 'react-native-ntag-424' {
     }
 }
 
-declare module 'crypto-browserify' {
-    export const createCipheriv: any;
-    export const createDecipheriv: any;
+declare module 'react-native-aes-ecb' {
+    export function encrypt(data: string, key: string): string;
+    export function decrypt(data: string, key: string): string;
 }

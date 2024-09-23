@@ -6,6 +6,7 @@ import Rive, { Alignment, Fit } from 'rive-react-native';
 import { useDrawer } from '@/hooks/useDrawer';
 import { Feather } from '@expo/vector-icons';
 import { FeatherIcon } from '@/data/icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type Link = { icon: FeatherIcon, title: string, href: Href<string> };
 
@@ -34,12 +35,12 @@ const links: Link[] = [
 
 const smallLinks: Link[] = [
     {
-        icon: 'register',
+        icon: 'activity',
         title: 'Product Info',
         href: '/info/productInfo'
     },
     {
-        icon: 'imprint',
+        icon: 'activity',
         title: 'Imprint',
         href: '/info/imprint'
     }
@@ -67,7 +68,11 @@ const DrawerContent = () => {
                     </View>))}
             </View>
             <View style={{ position: 'absolute', bottom: 0, paddingBottom: insets.bottom }}>
-                <View key={'logout'} style={{ paddingBottom: 10 }}><Pressable onPress={() => { toggleDrawer(); router.dismissAll(); }}><CText type='h3' style={{}}>Logout</CText></Pressable></View>
+                <View key={'logout'} style={{ paddingBottom: 10 }}><Pressable onPress={async () => { 
+                    await AsyncStorage.removeItem('token');
+                    toggleDrawer();
+                    router.dismissAll();
+                }}><CText type='h3' style={{}}>Logout</CText></Pressable></View>
                 {smallLinks.map((link) => (<View key={link.href.toString()} style={{ paddingBottom: 10 }}><Pressable onPress={() => { toggleDrawer(); router.navigate(link.href) }}><CText type='h3' style={{}}>{link.title}</CText></Pressable></View>))}
             </View>
         </View>

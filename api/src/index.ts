@@ -18,11 +18,18 @@ const createContext = async ({
     res,
 }: trpcExpress.CreateExpressContextOptions) => {
     const deviceId = await verifyDeviceId(req);
-    console.log('Authorization: ', req.headers['authorization']);
+    // Extract the token from the request
+
+    const token = req.headers['authorization']?.split(' ')[1];
+    console.log('VERIFY token', token);
+    console.log('VERIFY process.env.JWT_SECRET', process.env.JWT_SECRET);
+    const decryptedToken = token ? jwt.verify(token, process.env.JWT_SECRET as string) : null;
+    console.log('decryptedToken', decryptedToken);
     return {
         currentDevice: {
             id: deviceId,
         },
+        currentUser: decryptedToken,
     };
 }
 
@@ -77,15 +84,22 @@ const appRouter = t.router({
             throw new TRPCError({ code: 'BAD_REQUEST', message: 'Authentication failed' });
 
         // Generate jwt token
+        console.log('SIGN: process.env.JWT_SECRET', process.env.JWT_SECRET);
         const token = jwt.sign({ deviceId: currentDevice.id, cardUid: loginSession.cardUid }, process.env.JWT_SECRET as string, { expiresIn: '24h' });
+        console.log('SIGN: token', token);
 
-        const decryptionKeyFromPin = crc32(Buffer.from('123456'));
-        const encryptedToken = encrypt(Buffer.from(token), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc');
+        const decryptionKeyFromPin = crc32(Buffer.from('12345678', 'hex'));
+
+        const keyBuffer = Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]);
+        console.log('SIGN: keyBuffer length', keyBuffer.length);
+        const encryptedToken = encrypt(Buffer.from(token + '                                  '), Buffer.alloc(16), keyBuffer, 'aes-128-cbc');
+        const decryptedToken = decrypt(encryptedToken, Buffer.alloc(16), keyBuffer, 'aes-128-cbc');
+        console.log('SIGN: decryptedToken', decryptedToken.toString('utf8'));
 
         return { token: encryptedToken.toString('hex') };
     }),
-    getEvents: t.procedure.query(async ({ ctx: { currentDevice } }) => {
-        throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
+    getEvents: t.procedure.query(async ({ ctx: { currentUser } }) => {
+        if (!currentUser) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
 
         return [{ id: '1', name: 'Event 1' }, { id: '2', name: 'Event 2' }];
     }),
