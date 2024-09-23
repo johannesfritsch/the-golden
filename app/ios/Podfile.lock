@@ -1372,6 +1372,8 @@ PODS:
     - React-Core
     - RiveRuntime (= 5.14.0)
   - RiveRuntime (5.14.0)
+  - RNCAsyncStorage (1.23.1):
+    - React-Core
   - RNCPicker (2.7.5):
     - React-Core
   - RNDeviceInfo (13.0.0):
@@ -1535,6 +1537,7 @@ DEPENDENCIES:
   - React-utils (from `../../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../../node_modules/react-native/ReactCommon`)
   - rive-react-native (from `../../node_modules/rive-react-native`)
+  - "RNCAsyncStorage (from `../../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../../node_modules/@react-native-picker/picker`)"
   - RNDeviceInfo (from `../../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
@@ -1707,6 +1710,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon"
   rive-react-native:
     :path: "../../node_modules/rive-react-native"
+  RNCAsyncStorage:
+    :path: "../../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../../node_modules/@react-native-picker/picker"
   RNDeviceInfo:
@@ -1804,6 +1809,7 @@ SPEC CHECKSUMS:
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
   rive-react-native: 9d724daa93efa3066e19e53960f83df5098cc112
   RiveRuntime: c470cc8daa0c192c678f7abb35b980f95d2bb625
+  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
   RNDeviceInfo: 55264dd7cc939dad6e9c231a7621311f5277f1dc
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7

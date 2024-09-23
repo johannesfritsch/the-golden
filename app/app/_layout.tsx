@@ -1,13 +1,15 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Drawer from '@/components/Drawer';
 import { DevToolsBubble } from 'react-native-react-query-devtools';
 import {
+  MutationCache,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
@@ -16,32 +18,27 @@ import { httpLink } from '@trpc/client';
 import { getAndroidId, getBuildNumber, getDeviceId, getDeviceToken, getDeviceType, getInstanceId, getManufacturer, getSystemName, getSystemVersion, getUniqueId, getVersion, isTablet } from 'react-native-device-info'
 import rsa, { Hash } from 'react-native-fast-rsa'
 import { appKey } from '@/utils/appKey';
+import { LockScreenProvider } from '@/hooks/useLockScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
-      retry: false,
-    },
-  },
-});
 
 const trpcClient = trpc.createClient({
   links: [
     httpLink({
       // url: 'https://api.thegolden.events/trpc',
       url: 'http://192.168.0.142:4000/trpc',
+
       // You can pass any HTTP headers you wish here
       async headers() {
         const uniqueId = await getUniqueId();
         const nowString = new Date().toISOString();
         const encryptedStr = await rsa.encryptOAEP(`${uniqueId} | ${nowString}`, '', Hash.SHA256, appKey);
+        const token = await AsyncStorage.getItem('token');
 
         return {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           'x-unique-id': uniqueId,
           'x-device-time': nowString,
           'x-device-sign': encryptedStr,
@@ -74,6 +71,26 @@ export default function RootLayout() {
     DMSerifDisplay: require('../assets/fonts/DMSerifDisplay-Regular.ttf'),
   });
 
+  const queryClient = useMemo(() => new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) => {
+        router.navigate('/auth/login');
+      },
+    }),
+    mutationCache: new MutationCache({
+      onError: (error) => {
+        router.navigate('/auth/login');
+      },
+    }),
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        retry: false,
+      },
+    },
+  }), []);
+
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -89,11 +106,14 @@ export default function RootLayout() {
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <GestureHandlerRootView>
-            <Drawer>
-              <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-                <Stack.Screen name="(app)/info/productInfo" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
-              </Stack>
-            </Drawer>
+            <LockScreenProvider>
+              <Drawer>
+                <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+                  <Stack.Screen name="(app)/info/productInfo" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+                  <Stack.Screen name="(app)/auth/login" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+                </Stack>
+              </Drawer>
+            </LockScreenProvider>
             {__DEV__ && <DevToolsBubble />}
           </GestureHandlerRootView>
         </QueryClientProvider>

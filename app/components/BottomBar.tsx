@@ -1,7 +1,7 @@
 import Animated, { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useEffect } from "react"
-import { useDrawer } from "@/utils/use-drawer"
+import { useDrawer } from "@/hooks/useDrawer"
 
 export type BottomBarProps = {
   children: React.ReactNode

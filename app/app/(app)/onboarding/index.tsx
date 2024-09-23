@@ -97,7 +97,7 @@ const Onboarding = () => {
                                 <Button chevron style={{ marginBottom: 30 }} caption="Get your own Aura" onClick={() => {
                                     router.navigate('/waitlist');
                                 }} />
-                                <Pressable onPress={() => router.navigate('/auth/login')}><CText type='bold' style={{ textAlign: 'center' }}>Login with my Aura</CText></Pressable>
+                                <Pressable onPress={() => router.navigate('/events')}><CText type='bold' style={{ textAlign: 'center' }}>Already got an Aura</CText></Pressable>
                             </ContentSlider.Item>
                         </ContentSlider>
                     </View>

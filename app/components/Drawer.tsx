@@ -4,7 +4,7 @@ import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from "
 import DrawerContent from "./DrawerContent";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
-import { DrawerContext } from "@/utils/use-drawer";
+import { DrawerContext } from "@/hooks/useDrawer";
 
 export type DrawerProps = {
     children: React.ReactNode;

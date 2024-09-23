@@ -28,7 +28,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema.createTable('waitlist_members')
 		// Keys
 		.addColumn('deviceUniqueId', 'varchar(100)', col => col.notNull())
-		.addForeignKeyConstraint('deviceUniqueId', ['deviceUniqueId'], 'devices', ['uniqueId'])
+		.addForeignKeyConstraint('waitlist_members_fk_deviceUniqueId', ['deviceUniqueId'], 'devices', ['uniqueId'], fk => fk.onDelete('cascade'))
 		.addPrimaryKeyConstraint('waitlist_members_pk', ['deviceUniqueId'])
 		// Infos
 		.addColumn('ageGroup', sql`waitlist_age_group`, col => col.notNull())

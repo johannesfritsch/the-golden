@@ -4,7 +4,7 @@ import express from 'express';
 import { z } from 'zod';
 import { config } from 'dotenv';
 import { verifyDeviceId } from './device-verification.js';
-import { decrypt, encrypt } from './utils/crypto.js';
+import { crc32, decrypt, encrypt } from './utils/crypto.js';
 import * as crypto from 'crypto';
 import { compareArrays } from './utils/array.js';
 import jwt from 'jsonwebtoken';
@@ -18,6 +18,7 @@ const createContext = async ({
     res,
 }: trpcExpress.CreateExpressContextOptions) => {
     const deviceId = await verifyDeviceId(req);
+    console.log('Authorization: ', req.headers['authorization']);
     return {
         currentDevice: {
             id: deviceId,
@@ -39,7 +40,7 @@ const appRouter = t.router({
     })).mutation(async ({ input: { cardUid: cardUidBytes, bytes }, ctx: { currentDevice } }) => {
         const encryptedRandB = Buffer.from(bytes, 'hex');
         const cardUid = Buffer.from(cardUidBytes, 'hex');
-        
+
         const randB = decrypt(encryptedRandB, Buffer.alloc(16), Buffer.alloc(16), 'aes-128-cbc');
         const randA = await new Promise((resolve) => crypto.randomBytes(16, (_, buf) => resolve(buf))) as Buffer;
 
@@ -57,7 +58,7 @@ const appRouter = t.router({
             cardUid: cardUid.toString('hex'),
             randA: randA.toString('hex'),
         }).execute();
-        
+
         return { result: encryptedResult.toString('hex') };
     }),
     loginWithNfcPartTwo: t.procedure.input(z.object({
@@ -78,7 +79,15 @@ const appRouter = t.router({
         // Generate jwt token
         const token = jwt.sign({ deviceId: currentDevice.id, cardUid: loginSession.cardUid }, process.env.JWT_SECRET as string, { expiresIn: '24h' });
 
-        return { token };
+        const decryptionKeyFromPin = crc32(Buffer.from('123456'));
+        const encryptedToken = encrypt(Buffer.from(token), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc');
+
+        return { token: encryptedToken.toString('hex') };
+    }),
+    getEvents: t.procedure.query(async ({ ctx: { currentDevice } }) => {
+        throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
+
+        return [{ id: '1', name: 'Event 1' }, { id: '2', name: 'Event 2' }];
     }),
 });
 
@@ -91,6 +100,7 @@ app.use(
     }),
 );
 app.listen(parseInt(process.env.PORT as string), () => {
+    console.log(`Server started on http://localhost:${process.env.PORT}`);
 });
 
 export type AppRouter = typeof appRouter;

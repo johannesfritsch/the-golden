@@ -72,7 +72,7 @@ const EventGallery = ({ event, onPress, fullWidth = false, hideLabels = false }:
                 )}
             />
 
-            {!hideLabels && topRightLabel && <View style={{ position: 'absolute', top: 10, right: 10, backgroundColor: 'white', padding: 10, borderRadius: 20, shadowOpacity: 0.2, shadowRadius: 2, shadowColor: 'black', shadowOffset: { width: 0, height: 3 } }}><CText type="h3">{topRightLabel}</CText></View>}
+            {!hideLabels && topRightLabel && <View style={{ position: 'absolute', top: 10, right: 10, backgroundColor: 'white', padding: 10, borderRadius: 20, shadowOpacity: 0.2, shadowRadius: 2, shadowColor: 'black', shadowOffset: { width: 0, height: 3 } }}><CText type="h4">{topRightLabel}</CText></View>}
 
             <Pagination.Basic
                 progress={progress}

@@ -3,7 +3,7 @@ import { router } from "expo-router"
 import { Dimensions, View, Text, Pressable } from "react-native"
 import Rive, { Alignment, Fit } from "rive-react-native"
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useDrawer } from "@/utils/use-drawer";
+import { useDrawer } from "@/hooks/useDrawer";
 
 export type HeaderProps = {
     leftButton: 'menu' | 'back' | 'none'

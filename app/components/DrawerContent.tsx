@@ -3,7 +3,7 @@ import CText from './CText';
 import { router, Href, usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Rive, { Alignment, Fit } from 'rive-react-native';
-import { useDrawer } from '@/utils/use-drawer';
+import { useDrawer } from '@/hooks/useDrawer';
 import { Feather } from '@expo/vector-icons';
 import { FeatherIcon } from '@/data/icons';
 

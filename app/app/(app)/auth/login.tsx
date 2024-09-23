@@ -1,18 +1,17 @@
-import ButtonBottomBar from '@/components/ButtonBottomBar'
+import Button from '@/components/Button'
 import CText from '@/components/CText'
-import Layout from '@/components/Layout'
+import { NfcAuth } from '@/utils/nfc'
+import { trpc } from '@/utils/trpc'
 import { router } from 'expo-router'
 import { Dimensions, Pressable, View } from 'react-native'
 import nfcManager from 'react-native-nfc-manager'
-import { Image } from 'expo-image'
-import Header from '@/components/Header'
-import { NfcAuth } from '@/utils/nfc'
-import { Buffer } from 'buffer';
-import { trpc } from '@/utils/trpc'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { decrypt, crc32 } from 'react-native-ntag-424/src/services/crypto'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Rive from 'rive-react-native'
 
-
-const Login = () => {
-    const deviceWidth = Dimensions.get('window').width;
+const LockScreen = () => {
+    const insets = useSafeAreaInsets();
     const { mutateAsync: loginWithNfcPartOneAsync } = trpc.loginWithNfcPartOne.useMutation();
     const { mutateAsync: loginWithNfcPartTwoAsync } = trpc.loginWithNfcPartTwo.useMutation();
 
@@ -23,40 +22,54 @@ const Login = () => {
             await authenticator.initiate();
             await authenticator.selectApplicationFile();
 
+            const cardUid = '12345678901234';
+
             const randBEncrypted = await authenticator.authenticateEv2FirstPartOne(0);
-
-            const serverResponse = await loginWithNfcPartOneAsync({ cardUid: Buffer.from('0123456789ABCD', 'hex').toString('hex'), bytes: Buffer.from(randBEncrypted).toString('hex') });
-
+            console.log('------> randBEncrypted', randBEncrypted);
+            const serverResponse = await loginWithNfcPartOneAsync({ cardUid: Buffer.from(cardUid, 'hex').toString('hex'), bytes: Buffer.from(randBEncrypted).toString('hex') });
+            console.log('------> serverResponse.result', serverResponse.result);
             const partTwoEncrypted = await authenticator.authenticateEv2FirstPartTwo(Array.from(new Uint8Array(Buffer.from(serverResponse.result, 'hex'))));
-            const serverResponse2 = await loginWithNfcPartTwoAsync({ cardUid: Buffer.from('0123456789ABCD', 'hex').toString('hex'), bytes: Buffer.from(partTwoEncrypted).toString('hex') });
+            console.log('------> partTwoEncrypted', partTwoEncrypted);
+            const serverResponse2 = await loginWithNfcPartTwoAsync({ cardUid: Buffer.from(cardUid, 'hex').toString('hex'), bytes: Buffer.from(partTwoEncrypted).toString('hex') });
             console.log('------> serverResponse2.token', serverResponse2.token);
-        } catch (error) {
 
+            const decryptionKeyFromPin = crc32(Buffer.from('123456'));
+            const decryptedToken = decrypt(Buffer.from(serverResponse2.token, 'hex'), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc');
+            console.log('------> decryptedToken', decryptedToken.toString('utf8'));
+
+            if (/^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(decryptedToken.toString('utf8'))) {
+                await AsyncStorage.setItem('token', decryptedToken.toString('utf8'));
+                router.back();
+            } else {
+                throw new Error('Invalid PIN');
+            }
+
+        } catch (error) {
+            console.error(error);
         } finally {
             await authenticator.terminate();
         }
     }
 
-    return (
-        <Layout style={{ backgroundColor: '#B29146' }} topElement={<Header leftButton='back' rightButton='none' />} bottomElement={<ButtonBottomBar caption='Login using Aura' onClick={handleScanPress} />}>
-            <View style={{ marginBottom: 20, marginTop: 30 }}>
-                <CText type="h1" style={{ textAlign: 'center' }}>Scan your Aura</CText>
+    return (<>
+        <View style={{ backgroundColor: 'white', paddingTop: insets.top, paddingBottom: insets.bottom, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <View style={{ marginTop: -100 }}>
+                <View style={{ height: 150, marginBottom: 20 }}>
+                <Rive resourceName='logo' style={{ width: 150, height: 150, alignSelf: 'center' }} />
+                </View>
+                <CText style={{ textAlign: 'center', marginBottom: 10 }} type="h1">Please login to continue</CText>
+                <CText style={{ textAlign: 'center', marginBottom: 40, paddingHorizontal: 20 }} type="normal">The Golden is a members-only community. In order to continue, you need to be in possession of an Aura.</CText>
+                <View style={{ paddingHorizontal: 50 }}>
+                    <Button chevron caption="Login with your Aura" onClick={handleScanPress} />
+                </View>
+                <Pressable onPress={() => { router.dismissAll(); router.navigate('/waitlist'); }}>
+                    <CText style={{ textAlign: 'center', marginTop: 20 }} type="normal">How to get an Aura</CText>
+                </Pressable>
             </View>
-            <View style={{ marginBottom: 40 }}>
-                <CText type='normal' style={{ textAlign: 'center' }}>To log in, simply wear your Aura bracelet, necklace, or ring, and hold it near your device. The Aura seamlessly authenticates your identity.</CText>
-            </View>
-            <View style={{ marginBottom: 20 }}>
-                <Image source={require('../../../assets/images/bracelet.png')} style={{ borderColor: '#CCC', borderWidth: 1, width: deviceWidth * 0.8, height: deviceWidth * 0.8, borderRadius: deviceWidth * 0.8 / 2, alignSelf: 'center' }} />
-            </View>
-            <View style={{ marginBottom: 20 }}>
-                <Pressable onPress={() => router.replace('/waitlist')}><CText type="boldunderline" style={{ textAlign: 'center' }}>I don't have an Aura yet</CText></Pressable>
-            </View>
-            {__DEV__ && (<View style={{ marginBottom: 40 }}>
-                <Pressable onPress={() => router.navigate('/events')}><CText type="boldunderline" style={{ textAlign: 'center' }}>Debug: Skip login</CText></Pressable>
-            </View>)}
+        </View>
 
-        </Layout>
-    )
+    </>
+    );
 }
 
-export default Login
+export default LockScreen

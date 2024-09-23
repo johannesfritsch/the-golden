@@ -4,7 +4,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema.createTable('device_checkins')
 		// Keys
 		.addColumn('deviceUniqueId', 'varchar(100)', col => col.notNull())
-		.addForeignKeyConstraint('deviceUniqueId', ['deviceUniqueId'], 'devices', ['uniqueId'])
+		.addForeignKeyConstraint('device_checkins_fk_deviceUniqueId', ['deviceUniqueId'], 'devices', ['uniqueId'], fk => fk.onDelete('cascade'))
 		.addColumn('hash', 'varchar(255)', col => col.notNull())
 		.addPrimaryKeyConstraint('pk', ['deviceUniqueId', 'hash'])
 		// Common infos
