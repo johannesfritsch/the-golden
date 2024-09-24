@@ -18,8 +18,16 @@ const Login = () => {
     const { mutateAsync: loginWithNfcPartTwoAsync } = trpc.loginWithNfcPartTwo.useMutation();
 
     const appState = useRef(AppState.currentState);
-    const [hasValidToken, setHasValidToken] = useState(false);
-    const [hasValidPin, setHasValidPin] = useState(false);
+    useEffect(() => {
+        const subscription = AppState.addEventListener('change', nextAppState => {
+            if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+                AsyncStorage.getItem('token').then(token => token && setToken(token));
+            }
+            appState.current = nextAppState;
+        });
+        return () => subscription.remove();
+    }, []);
+    const [token, setToken] = useState<string | null>(null);
     const [pin, setPin] = useState('');
     const shakeAnimation = useSharedValue(0);
 
@@ -30,55 +38,11 @@ const Login = () => {
         transform: [{ translateX: shakeAnimation.value }],
     }));
 
-    useEffect(() => {
-        const subscription = AppState.addEventListener('change', nextAppState => {
-            if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-                AsyncStorage.getItem('token').then(token => setHasValidToken(token !== null));
-                AsyncStorage.getItem('pin').then(pin => setHasValidPin(pin !== null));
-            }
-            appState.current = nextAppState;
-        });
-        return () => subscription.remove();
-    }, []);
+
 
     useFocusEffect(useCallback(() => {
-        AsyncStorage.getItem('token').then(token => setHasValidToken(token !== null));
-        AsyncStorage.getItem('pin').then(pin => setHasValidPin(pin !== null));
+        AsyncStorage.getItem('token').then(token => token && setToken(token));
     }, []));
-
-    useEffect(() => {
-        if (pin.length === 4) {
-            AsyncStorage.getItem('token').then(token => {
-                console.log('Checking pin', pin, 'for token', token);
-
-                const decryptionKeyFromPin = crc32(Buffer.from(pin, 'hex'));
-
-                let decryptedToken = token ? decrypt(Buffer.from(token, 'hex'), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc') : null;
-                console.log('------> decryptedToken', decryptedToken?.toString('utf8'));
-
-
-                if (!(decryptedToken && /^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(decryptedToken.toString('utf8').trim()))) {
-                    shakeAnimation.value = withSequence(
-                        withTiming(15, { duration: 50, easing: Easing.elastic(10) }), 
-                        withTiming(0, { duration: 50, easing: Easing.elastic(10) }),
-                        withTiming(-15, { duration: 50, easing: Easing.elastic(10) }), 
-                        withTiming(0, { duration: 50, easing: Easing.elastic(10) })
-                    );
-                    setTimeout(() => {
-                        setPin('');
-                    }, 250);
-                } else {
-                    AsyncStorage.setItem('pin', pin);
-                    setHasValidPin(true);
-                    setTimeout(() => {
-                        setPin('');
-                    }, 250);
-                    router.back();
-                }
-
-            });
-        }
-    }, [pin]);
 
     const handleScanPress = async () => {
         const authenticator = new NfcAuth(nfcManager);
@@ -98,7 +62,7 @@ const Login = () => {
             const serverResponse2 = await loginWithNfcPartTwoAsync({ cardUid: Buffer.from(cardUid, 'hex').toString('hex'), bytes: Buffer.from(partTwoEncrypted).toString('hex') });
             console.log('------> serverResponse2.token', serverResponse2.token);
 
-            await AsyncStorage.setItem('token', serverResponse2.token);
+            setToken(serverResponse2.token);
         } catch (error) {
             console.error(error);
         } finally {
@@ -106,7 +70,38 @@ const Login = () => {
         }
     }
 
-    if (!hasValidToken) return (<>
+    useEffect(() => {
+        if (pin.length === 4) {
+            console.log('Checking pin', pin, 'for token', token);
+
+            const decryptionKeyFromPin = crc32(Buffer.from(pin, 'hex'));
+
+            let decryptedToken = token ? decrypt(Buffer.from(token, 'hex'), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc') : null;
+            console.log('------> decryptedToken', decryptedToken?.toString('utf8'));
+
+
+            if (!(decryptedToken && /^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(decryptedToken.toString('utf8').trim()))) {
+                shakeAnimation.value = withSequence(
+                    withTiming(15, { duration: 50, easing: Easing.elastic(10) }),
+                    withTiming(0, { duration: 50, easing: Easing.elastic(10) }),
+                    withTiming(-15, { duration: 50, easing: Easing.elastic(10) }),
+                    withTiming(0, { duration: 50, easing: Easing.elastic(10) })
+                );
+                setTimeout(() => {
+                    setPin('');
+                }, 250);
+            } else {
+                AsyncStorage.setItem('token', token!);
+                AsyncStorage.setItem('pin', pin);
+                setTimeout(() => {
+                    setPin('');
+                }, 250);
+                router.back();
+            }
+        }
+    }, [pin]);
+
+    if (!token) return (<>
         <View style={{ backgroundColor: 'white', paddingTop: insets.top, paddingBottom: insets.bottom, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <View style={{ marginTop: -100 }}>
                 <View style={{ height: 150, marginBottom: 20 }}>
@@ -144,10 +139,10 @@ const Login = () => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: 20, marginHorizontal: 40 }}>
                     {['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', ''].map((val, index) => (
                         <Pressable disabled={pin.length > 5} onPress={() => { setPin(pin => pin + val) }} key={index} style={{ width: '33.333%', padding: 10, aspectRatio: 1.0, justifyContent: 'center', alignItems: 'center' }}>
-                            {(pressed) => (
+                            {({ pressed }) => (
                                 <>
-                                    {val != '' && <View style={{ width: '100%', height: '100%', backgroundColor: pressed ? '#EEE' : '#AAA', borderRadius: 500, justifyContent: 'center', alignItems: 'center' }}>
-                                        <CText type='h2' style={{ color: pressed ? '#666' : '#FFF' }}>{val}</CText>
+                                    {val != '' && <View style={{ width: '100%', height: '100%', backgroundColor: !pressed ? '#EEE' : '#CCC', borderRadius: 500, justifyContent: 'center', alignItems: 'center' }}>
+                                        <CText type='h2' style={{ color: !pressed ? '#666' : '#FFF' }}>{val}</CText>
                                     </View>}
                                 </>
                             )}

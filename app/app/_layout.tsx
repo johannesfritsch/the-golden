@@ -21,6 +21,7 @@ import { appKey } from '@/utils/appKey';
 import { LockScreenProvider } from '@/hooks/useLockScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { crc32, decrypt } from 'react-native-ntag-424/src/services/crypto';
+import { AppState } from 'react-native';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -89,6 +90,22 @@ export default function RootLayout() {
     RobotoItalic: require('../assets/fonts/Roboto-Italic.ttf'),
     DMSerifDisplay: require('../assets/fonts/DMSerifDisplay-Regular.ttf'),
   });
+
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (appState.current === 'active' && nextAppState.match(/inactive|background/)) {
+        console.log('===== App has gone to the background, removing PIN =====');
+        console.log('===== App has gone to the background, removing PIN =====');
+        console.log('===== App has gone to the background, removing PIN =====');
+        console.log('===== App has gone to the background, removing PIN =====');
+        console.log('===== App has gone to the background, removing PIN =====');
+        AsyncStorage.removeItem('pin');
+      }
+      appState.current = nextAppState;
+    });
+    return () => subscription.remove();
+  }, []);
 
   const queryClient = useMemo(() => new QueryClient({
     queryCache: new QueryCache({
