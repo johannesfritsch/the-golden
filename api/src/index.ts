@@ -9,6 +9,7 @@ import * as crypto from 'crypto';
 import { compareArrays } from './utils/array.js';
 import jwt from 'jsonwebtoken';
 import { db } from './db.js';
+import { sampleEvents } from './data/event.js';
 
 config();
 
@@ -101,7 +102,7 @@ const appRouter = t.router({
     getEvents: t.procedure.query(async ({ ctx: { currentUser } }) => {
         if (!currentUser) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
 
-        return [{ id: '1', name: 'Event 1' }, { id: '2', name: 'Event 2' }];
+        return sampleEvents;
     }),
 });
 

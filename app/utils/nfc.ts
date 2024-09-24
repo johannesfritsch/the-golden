@@ -14,7 +14,9 @@ export class NfcAuth {
     }
 
     public async initiate() {
-        await this.nfcManager.requestTechnology(NfcTech.IsoDep);
+        await this.nfcManager.requestTechnology(NfcTech.IsoDep, {
+            alertMessage: 'Please tap your Aura NFC tag now',
+        });
         console.log('requestTechnology successful');
     }
 

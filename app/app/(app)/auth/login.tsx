@@ -2,18 +2,39 @@ import Button from '@/components/Button'
 import CText from '@/components/CText'
 import { NfcAuth } from '@/utils/nfc'
 import { trpc } from '@/utils/trpc'
-import { router } from 'expo-router'
-import { Pressable, View } from 'react-native'
+import { router, useFocusEffect } from 'expo-router'
+import { AppState, Pressable, View } from 'react-native'
 import nfcManager from 'react-native-nfc-manager'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { decrypt, crc32 } from 'react-native-ntag-424/src/services/crypto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Rive from 'rive-react-native'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 const Login = () => {
     const insets = useSafeAreaInsets();
     const { mutateAsync: loginWithNfcPartOneAsync } = trpc.loginWithNfcPartOne.useMutation();
     const { mutateAsync: loginWithNfcPartTwoAsync } = trpc.loginWithNfcPartTwo.useMutation();
+
+    const appState = useRef(AppState.currentState);
+    const [hasValidToken, setHasValidToken] = useState(false);
+    const [hasValidPin, setHasValidPin] = useState(false);
+
+    useEffect(() => {
+        const subscription = AppState.addEventListener('change', nextAppState => {
+            if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+                AsyncStorage.getItem('token').then(token => setHasValidToken(token !== null));
+                AsyncStorage.getItem('pin').then(pin => setHasValidPin(pin !== null));
+            }
+            appState.current = nextAppState;
+        });
+        return () => subscription.remove();
+    }, []);
+
+    useFocusEffect(useCallback(() => {
+        AsyncStorage.getItem('token').then(token => setHasValidToken(token !== null));
+        AsyncStorage.getItem('pin').then(pin => setHasValidPin(pin !== null));
+    }, []));
 
     const handleScanPress = async () => {
         const authenticator = new NfcAuth(nfcManager);
@@ -55,8 +76,9 @@ const Login = () => {
     return (<>
         <View style={{ backgroundColor: 'white', paddingTop: insets.top, paddingBottom: insets.bottom, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <View style={{ marginTop: -100 }}>
+                <CText style={{ textAlign: 'center', marginBottom: 10 }} type="normal">{JSON.stringify({ hasValidToken, hasValidPin })}</CText>
                 <View style={{ height: 150, marginBottom: 20 }}>
-                <Rive resourceName='logo' style={{ width: 150, height: 150, alignSelf: 'center' }} />
+                    <Rive resourceName='logo' style={{ width: 150, height: 150, alignSelf: 'center' }} />
                 </View>
                 <CText style={{ textAlign: 'center', marginBottom: 10 }} type="h1">Please login to continue</CText>
                 <CText style={{ textAlign: 'center', marginBottom: 40, paddingHorizontal: 20 }} type="normal">The Golden is a members-only community. In order to continue, you need to be in possession of an Aura.</CText>

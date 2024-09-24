@@ -33,7 +33,7 @@ const VideoPlayer = ({ source }: VideoPlayerProps) => {
     const handleVideoLoad = () => {
         setTimeout(() => {
         opacity.value = withTiming(0.0, { duration: 1250, easing: Easing.elastic(0.2) });
-        }, 500);
+        }, 150);
     }
 
     return (
