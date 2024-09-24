@@ -20,9 +20,27 @@ import rsa, { Hash } from 'react-native-fast-rsa'
 import { appKey } from '@/utils/appKey';
 import { LockScreenProvider } from '@/hooks/useLockScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { crc32, decrypt } from 'react-native-ntag-424/src/services/crypto';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const getDecryptedToken = async () => {
+  const token = await AsyncStorage.getItem('token');
+  const pin = await AsyncStorage.getItem('pin');
+
+  if (token === null || pin === null) return null;
+
+  const decryptionKeyFromPin = crc32(Buffer.from(pin, 'hex'));
+  const decryptedToken = token ? decrypt(Buffer.from(token, 'hex'), Buffer.alloc(16), Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]), 'aes-128-cbc') : null;
+  console.log('------> decryptedToken', decryptedToken?.toString('utf8'));
+
+  if (!(decryptedToken && /^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(decryptedToken.toString('utf8').trim()))) {
+    return null;
+  }
+
+  return decryptedToken;
+}
 
 const trpcClient = trpc.createClient({
   links: [
@@ -35,10 +53,11 @@ const trpcClient = trpc.createClient({
         const uniqueId = await getUniqueId();
         const nowString = new Date().toISOString();
         const encryptedStr = await rsa.encryptOAEP(`${uniqueId} | ${nowString}`, '', Hash.SHA256, appKey);
-        const token = await AsyncStorage.getItem('token');
+
+        const decryptedToken = await getDecryptedToken();
 
         return {
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+          ...(decryptedToken ? { 'Authorization': `Bearer ${decryptedToken}` } : {}),
           'x-unique-id': uniqueId,
           'x-device-time': nowString,
           'x-device-sign': encryptedStr,

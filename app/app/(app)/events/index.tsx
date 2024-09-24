@@ -6,6 +6,7 @@ import TabBar from "@/components/TabBar";
 import { trpc } from "@/utils/trpc";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
+import { View } from "react-native";
 
 const EventList = () => {
     const { data, error, isFetching, refetch } = trpc.getEvents.useQuery();
@@ -17,11 +18,9 @@ const EventList = () => {
         }, [])
     );
 
-    if (!data) return null;
-
     return (
         <Layout topElement={<Header leftButton='menu' rightButton='auth' />} bottomElement={<TabBar />} loading={!!error || isFetching} refetch={refetch}>
-            {data.map(event => (
+            {data && data.map(event => (
                 <EventCard key={event.id} event={event} />
             ))}
         </Layout>

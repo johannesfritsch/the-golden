@@ -20,7 +20,6 @@ const createContext = async ({
 }: trpcExpress.CreateExpressContextOptions) => {
     const deviceId = await verifyDeviceId(req);
     // Extract the token from the request
-
     const token = req.headers['authorization']?.split(' ')[1];
     console.log('VERIFY token', token);
     console.log('VERIFY process.env.JWT_SECRET', process.env.JWT_SECRET);
@@ -89,10 +88,10 @@ const appRouter = t.router({
         const token = jwt.sign({ deviceId: currentDevice.id, cardUid: loginSession.cardUid }, process.env.JWT_SECRET as string, { expiresIn: '24h' });
         console.log('SIGN: token', token);
 
-        const decryptionKeyFromPin = crc32(Buffer.from('12345678', 'hex'));
+        const decryptionKeyFromPin = crc32(Buffer.from('1234', 'hex'));
 
         const keyBuffer = Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]);
-        console.log('SIGN: keyBuffer length', keyBuffer.length);
+        console.log('SIGN: keyBuffer length', keyBuffer.byteLength);
         const encryptedToken = encrypt(Buffer.from(token + '                                  '), Buffer.alloc(16), keyBuffer, 'aes-128-cbc');
         const decryptedToken = decrypt(encryptedToken, Buffer.alloc(16), keyBuffer, 'aes-128-cbc');
         console.log('SIGN: decryptedToken', decryptedToken.toString('utf8'));
