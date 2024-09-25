@@ -1,6 +1,8 @@
 import { config } from 'dotenv';
 config();
 
+console.log(process.env);
+
 import { initTRPC, TRPCError } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
