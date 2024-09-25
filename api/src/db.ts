@@ -2,6 +2,10 @@ import { DB } from './db.d.js' // this is the Database interface we defined earl
 import pg from 'pg'
 import { Kysely, PostgresDialect } from 'kysely'
 
+console.log('connection parameters to kysely', {
+  connectionString: process.env.DATABASE_URL,
+});
+
 const dialect = new PostgresDialect({
   pool: new pg.Pool({
     connectionString: process.env.DATABASE_URL,
