@@ -1,8 +1,10 @@
+import { config } from 'dotenv';
+config();
+
 import { initTRPC, TRPCError } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
 import { z } from 'zod';
-import { config } from 'dotenv';
 import { verifyDeviceId } from './device-verification.js';
 import { crc32, decrypt, encrypt } from './utils/crypto.js';
 import * as crypto from 'crypto';
@@ -10,8 +12,6 @@ import { compareArrays } from './utils/array.js';
 import jwt from 'jsonwebtoken';
 import { db } from './db.js';
 import { sampleEvents } from './data/event.js';
-
-config();
 
 // created for each request
 const createContext = async ({
