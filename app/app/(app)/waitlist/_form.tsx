@@ -6,7 +6,6 @@ import CText from '@/components/CText';
 import Dropdown from '@/components/Dropdown';
 import i18nCountries from 'i18n-iso-countries/langs/en.json';
 import BoxSelector from '@/components/BoxSelector';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const genders = {
     'm': 'Male',
@@ -26,24 +25,28 @@ const ageGroups = {
     'other': 'Other',
 };
 
-type WaitlistFormData = {
+export type WaitlistFormData = {
     gender: (keyof typeof genders) | null,
     ageGroup: (keyof typeof ageGroups) | null,
     countryISO: string | null,
 };
 
+export type WaitlistFormValues = {
+    gender: (keyof typeof genders),
+    ageGroup: (keyof typeof ageGroups),
+    countryISO: string,
+};
+
 export type WaitlistFormProps = {
-    onSubmit: (values: WaitlistFormData) => void
+    onSubmit: (values: WaitlistFormValues) => void
 };
 
 const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
-    const insets = useSafeAreaInsets();
-
     return (
         <View style={{ height: '100%' }}>
             <Formik<WaitlistFormData>
                 initialValues={{ gender: null, ageGroup: null, countryISO: null }}
-                onSubmit={(values) => onSubmit(values)}
+                onSubmit={(values) => onSubmit(values as WaitlistFormValues)}
             >
                 {({ handleChange, handleSubmit, values }) => (
                     <View style={{ height: '100%' }}>

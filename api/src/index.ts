@@ -37,10 +37,41 @@ type Context = Awaited<ReturnType<typeof createContext>>;
 
 const t = initTRPC.context<Context>().create();
 
+export type GetWaitlistStatusReturnValue = {
+    waitlistEntered: false;
+} | {
+    waitlistEntered: true;
+    estimatedTimeRemaining: number;
+    waitlistPosition: number;
+};
+
 const appRouter = t.router({
-    getWaitlistStatus: t.procedure.input(z.string()).query(async ({ ctx: { currentDevice } }) => {
+    getWaitlistStatus: t.procedure.input(z.string()).query(async ({ ctx: { currentDevice } }): Promise<GetWaitlistStatusReturnValue> => {
+        const waitlistMember = await db.selectFrom('waitlist_members').selectAll().where('deviceUniqueId', '=', currentDevice.id).executeTakeFirst();
+        if (!waitlistMember) return { waitlistEntered: false };
+
         return { waitlistEntered: true, estimatedTimeRemaining: 1000000000, waitlistPosition: 5486 };
     }),
+    enterWaitlist: t.procedure
+        // .input(z.object({
+        //     ageGroup: z.string(),
+        //     gender: z.string(),
+        //     countryISO: z.string().length(2),
+        // }))
+        .mutation(async ({ ctx: { currentDevice } }) => {
+            await db.insertInto('waitlist_members').values({ deviceUniqueId: currentDevice.id, ageGroup: '36-45', gender: 'o', country: 'de' }).execute();
+            return { success: true };
+        }),
+    leaveWaitlist: t.procedure
+        // .input(z.object({
+        //     ageGroup: z.string(),
+        //     gender: z.string(),
+        //     countryISO: z.string().length(2),
+        // }))
+        .mutation(async ({ ctx: { currentDevice } }) => {
+            await db.deleteFrom('waitlist_members').where('deviceUniqueId', '=', currentDevice.id).execute();
+            return { success: true };
+        }),
     loginWithNfcPartOne: t.procedure.input(z.object({
         cardUid: z.string().regex(/^[0-9a-fA-F]{14}$/),
         bytes: z.string().regex(/^[0-9a-fA-F]{32}$/),

@@ -47,7 +47,7 @@ const trpcClient = trpc.createClient({
   links: [
     httpLink({
       // url: 'https://api.thegolden.events/trpc',
-      url: 'http://192.168.0.142:4000/trpc',
+      url: 'http://192.168.178.70:4000/trpc',
 
       // You can pass any HTTP headers you wish here
       async headers() {

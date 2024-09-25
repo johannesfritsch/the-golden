@@ -7,13 +7,18 @@ import Layout from '@/components/Layout';
 import React, { useState } from 'react'
 import { Modal, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import WaitlistForm from './form';
+import WaitlistForm, { WaitlistFormData } from './_form';
 import ModalLayout from '@/components/ModalLayout';
-import { router } from 'expo-router';
+import { trpc } from '@/utils/trpc';
 
-const Waitlist = () => {
+export type WaitListInfoProps = {
+  onJoin: (values: WaitlistFormData) => void
+}
+
+const WaitlistInfo = ({ onJoin }: WaitListInfoProps) => {
   const insets = useSafeAreaInsets();
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const { mutateAsync: enterWaitlist } = trpc.enterWaitlist.useMutation();
 
   return (
     <Layout topElement={<Header leftButton='back' rightButton='none' />} bottomElement={<BottomBar><Button caption='Join the waitlist' onClick={() => setIsFormVisible(true)} /></BottomBar>}>
@@ -28,12 +33,17 @@ const Waitlist = () => {
       </ScrollView>
       <Modal visible={isFormVisible} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setIsFormVisible(false)}>
         <ModalLayout onClose={() => setIsFormVisible(false)}>
-          <WaitlistForm onSubmit={() => { setIsFormVisible(false); router.navigate('/waitlist'); }} />
+          <WaitlistForm onSubmit={async (values) => {
+            await enterWaitlist();
+            console.log('After enterWaitlist');
+            onJoin(values);
+            setIsFormVisible(false);
+          }} />
         </ModalLayout>
       </Modal>
     </Layout>
   )
 }
 
-export default Waitlist
+export default WaitlistInfo
 
