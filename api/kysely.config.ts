@@ -15,11 +15,7 @@ export default defineConfig({
 		createDriver() {
 			return new PostgresDriver({
 				pool: new pg.Pool({
-					database: 'thegolden',
-					host: 'localhost',
-					user: 'thegolden',
-					password: 'thegolden',
-					port: 5432,
+					connectionString: process.env.DATABASE_URL,
 				}),
 			})
 		},
