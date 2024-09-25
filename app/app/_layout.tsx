@@ -22,6 +22,8 @@ import { LockScreenProvider } from '@/hooks/useLockScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { crc32, decrypt } from 'react-native-ntag-424/src/services/crypto';
 import { AppState } from 'react-native';
+import Config from "react-native-config";
+import { apiBaseUrl } from '@/utils/config';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -47,7 +49,7 @@ const trpcClient = trpc.createClient({
   links: [
     httpLink({
       // url: 'https://api.thegolden.events/trpc',
-      url: 'http://192.168.178.70:4000/trpc',
+      url: `${apiBaseUrl}/trpc`,
 
       // You can pass any HTTP headers you wish here
       async headers() {
@@ -136,6 +138,10 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
+  console.log('apiBaseUrl', apiBaseUrl);
+  console.log('Config', Config);
+  console.log('__DEV__', __DEV__);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

@@ -138,7 +138,7 @@ const appRouter = t.router({
 
 const app = express();
 app.use(
-    '/trpc',
+    '/v:buildnumber/trpc',
     trpcExpress.createExpressMiddleware({
         router: appRouter,
         createContext,

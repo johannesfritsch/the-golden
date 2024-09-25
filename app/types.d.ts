@@ -13,3 +13,13 @@ declare module 'react-native-aes-ecb' {
     export function encrypt(data: string, key: string): string;
     export function decrypt(data: string, key: string): string;
 }
+
+declare module 'react-native-config' {
+    export interface NativeConfig {
+        API_DEVELOPMENT_BASE_URL: string;
+        API_PRODUCTION_BASE_URL: string;
+    }
+
+    export const Config: NativeConfig
+    export default Config
+}
