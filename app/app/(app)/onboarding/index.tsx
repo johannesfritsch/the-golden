@@ -23,6 +23,7 @@ const Onboarding = () => {
     const [handled, setHandled] = useState(false);
 
     const contentHeight = useSharedValue(30.0);
+    const pageControlMarginTop = useSharedValue(25);
 
     const videoPlayerStyle = useAnimatedStyle(() => ({ 
         height: `${100 - contentHeight.value}%`, 
@@ -41,13 +42,17 @@ const Onboarding = () => {
     }));
 
     const pageControlStyle = useAnimatedStyle(() => ({
-        marginTop: 40 - contentHeight.value,
+        marginTop: pageControlMarginTop.value,
     }));
 
     useEffect(() => {
-        contentHeight.value = withTiming([35.0, 35.0, 35.0, 35.0, 50.0][currentSlide], {
+        contentHeight.value = withTiming([32.5, 32.5, 32.5, 32.5, 45.0][currentSlide], {
             duration: 500,
-            easing: Easing.elastic(1.5),
+            easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        });
+        pageControlMarginTop.value = withTiming([30, 30, 30, 30, 0][currentSlide], {
+            duration: 500,
+            easing: Easing.bezier(0.25, 0.1, 0.25, 1),
         });
     }, [currentSlide]);
 

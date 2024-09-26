@@ -10,7 +10,6 @@ import jwt from 'jsonwebtoken';
 import { db } from './db.js';
 import { sampleEvents } from './data/event.js';
 import i18nCountries from 'i18n-iso-countries';
-import wait from './utils/wait.js';
 
 // created for each request
 const createContext = async ({
@@ -49,7 +48,6 @@ export type GetWaitlistStatusReturnValue = {
 
 const appRouter = t.router({
     getWaitlistStatus: t.procedure.query(async ({ ctx: { currentDevice } }): Promise<GetWaitlistStatusReturnValue> => {
-        await wait(1000);
         const waitlistMember = await db.selectFrom('waitlist_members').selectAll().where('deviceUniqueId', '=', currentDevice.id).executeTakeFirst();
         if (!waitlistMember) return { waitlistEntered: false };
 
