@@ -105,8 +105,8 @@ const Onboarding = () => {
                                 <CText type='bold' style={{ textAlign: 'center', opacity: 0.3 }}>Swipe right to proceed</CText>
                             </ContentSlider.Item>
                             <ContentSlider.Item>
-                                <CText type='h1' style={{ textAlign: 'center', marginBottom: 20 }}>Most Exclusive Guest Lists</CText>
-                                <CText type='normal' style={{ textAlign: 'center', marginBottom: 20 }}>At The Golden, our guest lists are peer-reviewed, ensuring every event brings together a remarkable circle of influential individuals.</CText>
+                                <CText type='h1' style={{ textAlign: 'center', marginBottom: 20 }}>Exclusive Guest Lists</CText>
+                                <CText type='normal' style={{ textAlign: 'center', marginBottom: 20 }}>Our guest lists are peer-reviewed, ensuring every event brings together a remarkable circle of influential individuals.</CText>
                                 <CText type='bold' style={{ textAlign: 'center', opacity: 0.3 }}>Swipe right to proceed</CText>
                             </ContentSlider.Item>
                             <ContentSlider.Item>

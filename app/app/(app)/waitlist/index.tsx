@@ -14,7 +14,7 @@ const Waitlist = () => {
         refetch();
     }, []));
 
-    if (!isFetching && data && data.waitlistEntered) return <WaitlistStatus status={data} onLeave={() => refetch()} />;
+    if (!isFetching && data && data.waitlistEntered) return <WaitlistStatus refetch={refetch} status={data} onLeave={() => refetch()} />;
     if (!isFetching && data && !data.waitlistEntered) return <WaitlistInfo onJoin={() => refetch()} />;
 
     if (error) return <CText type='h1'>An error has occurred: {error.message}</CText>;

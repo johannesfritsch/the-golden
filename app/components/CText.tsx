@@ -3,14 +3,18 @@ import { StyleProp, Text, TextStyle } from 'react-native';
 
 export type CTextProps = {
     children: ReactNode,
-    type: 'h1' | 'h2' | 'h3' | 'h4' | 'normal' | 'bold' | 'italic' | 'underline' | 'boldunderline',
+    type: 'h0' | 'h1' | 'h2' | 'h3' | 'h4' | 'normal' | 'bold' | 'italic' | 'underline' | 'boldunderline',
     style?: StyleProp<TextStyle>,
 }
 
 const CText = ({ children, type, style: additionalStyle = {} }: CTextProps) => {
     return (
         <Text style={[{
-            ...(type === 'h1' ? {
+            ...(type === 'h0' ? {
+                fontSize: 50,
+                lineHeight: 50,
+                fontFamily: 'DMSerifDisplay',
+            } : type === 'h1' ? {
                 fontSize: 28,
                 lineHeight: 38,
                 fontFamily: 'DMSerifDisplay',

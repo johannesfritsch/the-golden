@@ -12,7 +12,7 @@ import Rive, { Alignment, Fit, RiveRef } from 'rive-react-native'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { GetWaitlistStatusReturnValue } from '@the-golden-foundation/api'
 
-const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnValue, onLeave: () => void }) => {
+const WaitlistStatus = ({ status, onLeave, refetch }: { refetch: () => void, status: GetWaitlistStatusReturnValue, onLeave: () => void }) => {
     const riveRef = React.useRef<RiveRef>(null);
     const [informationModalOpen, setInfoModalOpen] = useState(false);
     const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -43,7 +43,7 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
     }, [status, riveRef]);
 
     return (
-        <Layout topElement={<Header leftButton='back' rightButton={{
+        <Layout refetch={refetch} topElement={<Header leftButton='back' rightButton={{
             type: 'menu', items: [{
                 title: 'Share invite code',
                 subtitle: 'get your Aura quicker',
@@ -54,7 +54,7 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
                 onPress: () => {
                     setReferralModalOpen(true);
                 },
-            },{
+            }, {
                 title: 'Enter code',
                 subtitle: 'get your Aura quicker',
                 image: {
@@ -64,7 +64,7 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
                 onPress: () => {
                     setReferralModalOpen(true);
                 },
-            },{
+            }, {
                 title: 'Leave the waitlist',
                 subtitle: 'This action is irreversible',
                 attributes: {
@@ -87,19 +87,19 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
         }} />} bottomElement={(status?.waitlistEntered && <BottomBar><Button style={{ width: '100%' }} caption='Tired of waiting?' onClick={() => setReferralModalOpen(true)} /></BottomBar>)}>
             {status.waitlistEntered && (
                 <View style={{ marginTop: 50 }}>
-                    <CText type='h1' style={{ marginBottom: 20, textAlign: 'center' }}>Your Waitlist Status</CText>
-                    <CText type='normal' style={{ marginBottom: 0, textAlign: 'center' }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10, paddingBottom: 0, paddingHorizontal: 90 }}>
-                        <Rive ref={riveRef} resourceName='golden-ticket' artboardName='Main 2' stateMachineName='State Machine' alignment={Alignment.Center} fit={Fit.Contain} style={{ width: 150, height: 150 }} />
+                    <CText type='h1' style={{ marginBottom: 20, textAlign: 'center' }}>Your Waitlist Position</CText>
+                    <CText type='normal' style={{ marginBottom: 30, textAlign: 'center' }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
+                    <View style={{ marginBottom: 20 }}>
+                        <CText type='h0' style={{ textAlign: 'center' }}>{status.waitlistPosition}</CText>
                     </View>
-                    <CText type='normal' style={{ marginBottom: 20, textAlign: 'center' }}>Estimated waiting time: {formatDuration(intervalToDuration({ start: 0, end: status.estimatedTimeRemaining }), { format: ['days'] })}</CText>
+                    <CText type='normal' style={{ marginBottom: 20, textAlign: 'center' }}>Estimated waiting time: {status.estimatedTimeRemaining < 24 * 60 * 60 * 1000 ? 'very soon' : formatDuration(intervalToDuration({ start: 0, end: status.estimatedTimeRemaining }), { format: ['days'] })}</CText>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
-                    <Pressable onPress={() => setInfoModalOpen(true)}>
-                        <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>Information</CText>
-                    </Pressable>
-                    <Pressable onPress={() => setCodeModalOpen(true)}>
-                        <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>I got a code</CText>
-                    </Pressable>
+                        <Pressable onPress={() => setInfoModalOpen(true)}>
+                            <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>Information</CText>
+                        </Pressable>
+                        <Pressable onPress={() => setCodeModalOpen(true)}>
+                            <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>I got a code</CText>
+                        </Pressable>
                     </View>
                     <Modal visible={informationModalOpen} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setInfoModalOpen(false)}>
                         <ModalLayout onClose={() => setInfoModalOpen(false)}>

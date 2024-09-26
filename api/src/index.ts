@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 import { db } from './db.js';
 import { sampleEvents } from './data/event.js';
 import i18nCountries from 'i18n-iso-countries';
-import { sql } from 'kysely';
+import createFaker from './utils/faker.js';
 
 // created for each request
 const createContext = async ({
@@ -30,6 +30,8 @@ const createContext = async ({
         },
     };
 }
+
+const admissionsPerDay = 20;
 
 type Context = Awaited<ReturnType<typeof createContext>>;
 
@@ -60,8 +62,10 @@ const appRouter = t.router({
             .select('rn')
             .where('deviceUniqueId', '=', currentDevice.id)
             .executeTakeFirst();
-        console.log('res', res);
-        return { waitlistEntered: true, estimatedTimeRemaining: 1000000000, waitlistPosition: res?.rn ?? 9999 };
+        
+        const admissionRate = 24 * 60 * 60 * 1000 / admissionsPerDay;
+
+        return { waitlistEntered: true, estimatedTimeRemaining: admissionRate * res!.rn, waitlistPosition: res!.rn };
     }),
     enterWaitlist: t.procedure
         .input(z.object({
@@ -156,3 +160,5 @@ app.listen(parseInt(process.env.PORT as string), () => {
 });
 
 export type AppRouter = typeof appRouter;
+
+createFaker();
