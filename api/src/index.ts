@@ -2,7 +2,7 @@ import { initTRPC, TRPCError } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
 import { z } from 'zod';
-import { verifyDeviceId } from './device-verification.js';
+import { verifyDeviceId } from './utils/device-verification.js';
 import { crc32, decrypt, encrypt } from './utils/crypto.js';
 import * as crypto from 'crypto';
 import { compareArrays } from './utils/array.js';
@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import { db } from './db.js';
 import { sampleEvents } from './data/event.js';
 import i18nCountries from 'i18n-iso-countries';
+import { sql } from 'kysely';
 
 // created for each request
 const createContext = async ({
@@ -17,12 +18,8 @@ const createContext = async ({
     res,
 }: trpcExpress.CreateExpressContextOptions) => {
     const deviceId = await verifyDeviceId(req);
-    // Extract the token from the request
     const token = req.headers['authorization']?.split(' ')[1];
-    console.log('VERIFY token', token);
-    console.log('VERIFY process.env.JWT_SECRET', process.env.JWT_SECRET);
     const decryptedToken = token ? jwt.verify(token, process.env.JWT_SECRET as string) : null;
-    console.log('decryptedToken', decryptedToken);
     return {
         currentDevice: {
             id: deviceId,
@@ -51,10 +48,20 @@ const appRouter = t.router({
         const waitlistMember = await db.selectFrom('waitlist_members').selectAll().where('deviceUniqueId', '=', currentDevice.id).executeTakeFirst();
         if (!waitlistMember) return { waitlistEntered: false };
 
-        return { waitlistEntered: true, estimatedTimeRemaining: 1000000000, waitlistPosition: 5486 };
-    }),
-    getCountries: t.procedure.query(async () => {
-        
+        const res = await db.with('waitlist_members', qb => 
+            qb.selectFrom('waitlist_members')
+            .selectAll()
+            .select(eb => 
+                eb.fn.agg<number>('row_number', [])
+                .over((ob) => ob.orderBy("createdAt", "asc")) // Add partition by if needed (ob.partitionBy('countryISO'))
+                .as('rn'))
+            .orderBy('createdAt asc')
+        ).selectFrom('waitlist_members')
+            .select('rn')
+            .where('deviceUniqueId', '=', currentDevice.id)
+            .executeTakeFirst();
+        console.log('res', res);
+        return { waitlistEntered: true, estimatedTimeRemaining: 1000000000, waitlistPosition: res?.rn ?? 9999 };
     }),
     enterWaitlist: t.procedure
         .input(z.object({

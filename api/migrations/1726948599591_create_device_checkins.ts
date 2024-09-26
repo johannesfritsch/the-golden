@@ -1,4 +1,4 @@
-import type { Kysely } from 'kysely'
+import { sql, type Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema.createTable('device_checkins')
@@ -22,8 +22,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn('androidId', 'varchar(255)')
 		.addColumn('deviceToken', 'text')
 		// Timestamps
-		.addColumn('createdAt', 'timestamp', col => col.notNull().defaultTo('now()'))
-		.addColumn('updatedAt', 'timestamp', col => col.notNull().defaultTo('now()'))
+		.addColumn('createdAt', 'timestamp', col => col.notNull().defaultTo(sql`now()`))
+		.addColumn('updatedAt', 'timestamp', col => col.notNull().defaultTo(sql`now()`))
 		.execute();
 	await db.schema.createIndex('device_checkins_deviceUniqueId_hash').on('device_checkins').columns(['deviceUniqueId', 'hash']).execute();
 }

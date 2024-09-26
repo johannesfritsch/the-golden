@@ -35,8 +35,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn('gender', sql`waitlist_gender`, col => col.notNull())
 		.addColumn('country', 'varchar(2)', col => col.notNull())
 		// Timestamps
-		.addColumn('createdAt', 'timestamp', col => col.notNull().defaultTo('now()'))
-		.addColumn('updatedAt', 'timestamp', col => col.notNull().defaultTo('now()'))
+		.addColumn('createdAt', 'timestamp', col => col.notNull().defaultTo(sql`now()`))
+		.addColumn('updatedAt', 'timestamp', col => col.notNull().defaultTo(sql`now()`))
 
 		.execute();
 }

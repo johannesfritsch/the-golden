@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { privateDecrypt, constants, createHash } from 'crypto';
-import { db } from './db.js';
+import { db } from '../db.js';
 import express from 'express';
 
 const hashedHeaders = [
