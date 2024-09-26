@@ -68,7 +68,7 @@ const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
                             </View>
                         </View>
                         <View style={{ paddingTop: 30 }}>
-                            <Button disabled={!values.gender || !values.ageGroup || !values.countryISO} onClick={handleSubmit} caption='Join our Early Access Program' />
+                            <Button chevron style={{ width: '100%' }} disabled={!values.gender || !values.ageGroup || !values.countryISO} onClick={handleSubmit} caption='Join our Early Access Program' />
                         </View>
                     </View>
 

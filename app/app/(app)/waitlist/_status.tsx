@@ -43,7 +43,48 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
     }, [status, riveRef]);
 
     return (
-        <Layout topElement={<Header leftButton='back' rightButton='none' />} bottomElement={(status?.waitlistEntered && <BottomBar><Button caption='Tired of waiting?' onClick={() => setReferralModalOpen(true)} /></BottomBar>)}>
+        <Layout topElement={<Header leftButton='back' rightButton={{
+            type: 'menu', items: [{
+                title: 'Share invite code',
+                subtitle: 'get your Aura quicker',
+                image: {
+                    ios: 'square.and.arrow.up',
+                    android: 'ic_menu_share',
+                },
+                onPress: () => {
+                    setReferralModalOpen(true);
+                },
+            },{
+                title: 'Enter code',
+                subtitle: 'get your Aura quicker',
+                image: {
+                    ios: 'person.2',
+                    android: 'ic_menu_set_as',
+                },
+                onPress: () => {
+                    setReferralModalOpen(true);
+                },
+            },{
+                title: 'Leave the waitlist',
+                subtitle: 'This action is irreversible',
+                attributes: {
+                    destructive: true,
+                },
+                image: {
+                    ios: 'trash',
+                    android: 'ic_menu_delete',
+                },
+                onPress: () => {
+                    Alert.alert('Leave the waitlist', 'Are you sure to leave the waitlist? There is no way back.', [
+                        {
+                            text: 'Leave waitlist', onPress: async () => {
+                                await leaveWaitlist();
+                                onLeave();
+                            }
+                        }, { text: 'Cancel', onPress: () => { }, style: 'cancel' }]);
+                },
+            },]
+        }} />} bottomElement={(status?.waitlistEntered && <BottomBar><Button style={{ width: '100%' }} caption='Tired of waiting?' onClick={() => setReferralModalOpen(true)} /></BottomBar>)}>
             {status.waitlistEntered && (
                 <View style={{ marginTop: 50 }}>
                     <CText type='h1' style={{ marginBottom: 20, textAlign: 'center' }}>Your Waitlist Status</CText>
@@ -52,23 +93,14 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
                         <Rive ref={riveRef} resourceName='golden-ticket' artboardName='Main 2' stateMachineName='State Machine' alignment={Alignment.Center} fit={Fit.Contain} style={{ width: 150, height: 150 }} />
                     </View>
                     <CText type='normal' style={{ marginBottom: 20, textAlign: 'center' }}>Estimated waiting time: {formatDuration(intervalToDuration({ start: 0, end: status.estimatedTimeRemaining }), { format: ['days'] })}</CText>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
                     <Pressable onPress={() => setInfoModalOpen(true)}>
-                        <CText type='boldunderline' style={{ marginBottom: 20, textAlign: 'center' }}>Information</CText>
+                        <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>Information</CText>
                     </Pressable>
                     <Pressable onPress={() => setCodeModalOpen(true)}>
-                        <CText type='boldunderline' style={{ marginBottom: 20, textAlign: 'center' }}>I got a code</CText>
+                        <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>I got a code</CText>
                     </Pressable>
-                    <Pressable onPress={async () => {
-                        Alert.alert('Leave the waitlist', 'Are you sure to leave the waitlist? There is no way back.', [
-                            {
-                                text: 'Leave waitlist', onPress: async () => {
-                                    await leaveWaitlist();
-                                    onLeave();
-                                }
-                            }, { text: 'Cancel', onPress: () => { }, style: 'cancel' }]);
-                    }}>
-                        <CText type='boldunderline' style={{ marginBottom: 20, textAlign: 'center' }}>Leave waitlist</CText>
-                    </Pressable>
+                    </View>
                     <Modal visible={informationModalOpen} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setInfoModalOpen(false)}>
                         <ModalLayout onClose={() => setInfoModalOpen(false)}>
                             <CText type='h1' style={{ marginBottom: 20 }}>Your Waitlist Status</CText>
@@ -85,7 +117,7 @@ const WaitlistStatus = ({ status, onLeave }: { status: GetWaitlistStatusReturnVa
                             <PropertyView style={{ marginBottom: 25 }} icon={'search'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
                             <PropertyView style={{ marginBottom: 25 }} icon={'code'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
                             <PropertyView style={{ marginBottom: 40 }} icon={'heart'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
-                            <Button caption='Share The Golden with your friends now' onClick={() => {
+                            <Button style={{ width: '100%' }} caption='Share The Golden now' onClick={() => {
                                 Share.share({
                                     message: `🚀 Join me on The Golden! 🏆
 

@@ -4,13 +4,23 @@ import { Dimensions, View, Text, Pressable } from "react-native"
 import Rive, { Alignment, Fit } from "rive-react-native"
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDrawer } from "@/hooks/useDrawer";
-import { MenuView } from '@react-native-menu/menu';
+import { MenuView,  } from '@react-native-menu/menu';
 import { Platform } from "react-native";
-import CText from "./CText";
 
 export type HeaderProps = {
     leftButton: 'menu' | 'back' | 'none'
-    rightButton: 'auth' | 'none'
+    rightButton: { type: 'menu', items: {
+        title: string;
+        subtitle?: string;
+        image: {
+            ios: string;
+            android: string;
+        },
+        attributes?: {
+            destructive?: boolean;
+        },
+        onPress: () => void;
+    }[] } | { type: 'none' }
 }
 
 const Header = ({ leftButton, rightButton }: HeaderProps) => {
@@ -27,78 +37,23 @@ const Header = ({ leftButton, rightButton }: HeaderProps) => {
                 <Rive resourceName='logo' artboardName='Artboard' stateMachineName='State Machine 1' alignment={Alignment.Center} fit={Fit.Contain} />
             </View>
             <View style={{ position: 'absolute', right: 0, width: 70, height: 50, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-                {rightButton === 'auth' && <Pressable onPress={() => router.navigate('/profile')}><Feather name="user" size={30} color="white" /></Pressable>}
-                <MenuView
-        title="Menu Title"
-        onPressAction={({ nativeEvent }) => {
-          console.warn(JSON.stringify(nativeEvent));
-        }}
-        actions={[
-          {
-            id: 'add',
-            title: 'Add',
-            titleColor: '#2367A2',
-            image: Platform.select({
-              ios: 'plus',
-              android: 'ic_menu_add',
-            }),
-            imageColor: '#2367A2',
-            subactions: [
-              {
-                id: 'nested1',
-                title: 'Nested action',
-                titleColor: 'rgba(250,180,100,0.5)',
-                subtitle: 'State is mixed',
-                image: Platform.select({
-                  ios: 'heart.fill',
-                  android: 'ic_menu_today',
-                }),
-                imageColor: 'rgba(100,200,250,0.3)',
-                state: 'mixed',
-              },
-              {
-                id: 'nestedDestructive',
-                title: 'Destructive Action',
-                attributes: {
-                  destructive: true,
-                },
-                image: Platform.select({
-                  ios: 'trash',
-                  android: 'ic_menu_delete',
-                }),
-              },
-            ],
-          },
-          {
-            id: 'share',
-            title: 'Share Action',
-            titleColor: '#46F289',
-            subtitle: 'Share action on SNS',
-            image: Platform.select({
-              ios: 'square.and.arrow.up',
-              android: 'ic_menu_share',
-            }),
-            imageColor: '#46F289',
-            state: 'on',
-          },
-          {
-            id: 'destructive',
-            title: 'Destructive Action',
-            attributes: {
-              destructive: true,
-            },
-            image: Platform.select({
-              ios: 'trash',
-              android: 'ic_menu_delete',
-            }),
-          },
-        ]}
-        shouldOpenOnLongPress={false}
-      >
-        <View>
-          <CText type="normal">Test</CText>
-        </View>
-      </MenuView>
+                {rightButton.type === 'menu' && (
+                    <MenuView
+                        onPressAction={({ nativeEvent }) => {
+                            rightButton.items[parseInt(nativeEvent.event)].onPress();
+                        }}
+                        actions={rightButton.items.map((item, index) => ({
+                                id: index.toString(),
+                                title: item.title,
+                                subtitle: item.subtitle,
+                                image: Platform.OS === 'ios' ? item.image.ios : item.image.android,
+                                attributes: item.attributes,
+                        }))}
+                    >
+                        <View>
+                            <Feather name="more-horizontal" size={30} color="white" />
+                        </View>
+                    </MenuView>)}
             </View>
         </View>
     )

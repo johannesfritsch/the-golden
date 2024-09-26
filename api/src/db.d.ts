@@ -22,7 +22,7 @@ export interface DeviceCheckins {
   buildVersion: string;
   createdAt: Generated<Timestamp>;
   deviceId: string;
-  deviceToken: string;
+  deviceToken: string | null;
   deviceType: string;
   deviceUniqueId: string;
   hash: string;
@@ -40,6 +40,16 @@ export interface Devices {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface LoginPieces {
+  applicationKey: string;
+  applicationKeySlot: number;
+  cardUid: string;
+  createdAt: Generated<Timestamp>;
+  masterKey: string;
+  pin: string;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface LoginSessions {
   cardUid: string;
   createdAt: Generated<Timestamp>;
@@ -48,7 +58,7 @@ export interface LoginSessions {
 
 export interface WaitlistMembers {
   ageGroup: WaitlistAgeGroup;
-  country: string;
+  countryISO: string;
   createdAt: Generated<Timestamp>;
   deviceUniqueId: string;
   gender: WaitlistGender;
@@ -58,6 +68,7 @@ export interface WaitlistMembers {
 export interface DB {
   device_checkins: DeviceCheckins;
   devices: Devices;
+  login_pieces: LoginPieces;
   login_sessions: LoginSessions;
   waitlist_members: WaitlistMembers;
 }

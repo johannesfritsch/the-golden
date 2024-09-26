@@ -1,8 +1,3 @@
-import { config } from 'dotenv';
-config();
-
-console.log(process.env);
-
 import { initTRPC, TRPCError } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
@@ -14,6 +9,7 @@ import { compareArrays } from './utils/array.js';
 import jwt from 'jsonwebtoken';
 import { db } from './db.js';
 import { sampleEvents } from './data/event.js';
+import i18nCountries from 'i18n-iso-countries';
 
 // created for each request
 const createContext = async ({
@@ -31,7 +27,10 @@ const createContext = async ({
         currentDevice: {
             id: deviceId,
         },
-        currentUser: decryptedToken,
+        currentUser: decryptedToken as {
+            deviceId: string;
+            cardUid: string;
+        },
     };
 }
 
@@ -54,22 +53,23 @@ const appRouter = t.router({
 
         return { waitlistEntered: true, estimatedTimeRemaining: 1000000000, waitlistPosition: 5486 };
     }),
+    getCountries: t.procedure.query(async () => {
+        
+    }),
     enterWaitlist: t.procedure
-        // .input(z.object({
-        //     ageGroup: z.string(),
-        //     gender: z.string(),
-        //     countryISO: z.string().length(2),
-        // }))
-        .mutation(async ({ ctx: { currentDevice } }) => {
-            await db.insertInto('waitlist_members').values({ deviceUniqueId: currentDevice.id, ageGroup: '36-45', gender: 'o', country: 'de' }).execute();
+        .input(z.object({
+            ageGroup: z.enum(['18-25', '26-35', '36-45', '46-55', '56-65', '66-75', '76-85', '86-95', 'other']),
+            gender: z.enum(['f', 'm', 'o']),
+            countryISO: z.string().length(2),
+        }))
+        .mutation(async ({ input, ctx: { currentDevice } }) => {
+            const countryName = i18nCountries.getName(input.countryISO, 'en');
+            if (!countryName) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid country code' });
+            
+            await db.insertInto('waitlist_members').values({ deviceUniqueId: currentDevice.id, ...input }).execute();
             return { success: true };
         }),
     leaveWaitlist: t.procedure
-        // .input(z.object({
-        //     ageGroup: z.string(),
-        //     gender: z.string(),
-        //     countryISO: z.string().length(2),
-        // }))
         .mutation(async ({ ctx: { currentDevice } }) => {
             await db.deleteFrom('waitlist_members').where('deviceUniqueId', '=', currentDevice.id).execute();
             return { success: true };
@@ -125,15 +125,13 @@ const appRouter = t.router({
 
         const keyBuffer = Buffer.concat([decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin, decryptionKeyFromPin]);
         console.log('SIGN: keyBuffer length', keyBuffer.byteLength);
+        // TODO: FIX: This is to avoid the token being capped at 16 bytes
         const encryptedToken = encrypt(Buffer.from(token + '                                  '), Buffer.alloc(16), keyBuffer, 'aes-128-cbc');
-        const decryptedToken = decrypt(encryptedToken, Buffer.alloc(16), keyBuffer, 'aes-128-cbc');
-        console.log('SIGN: decryptedToken', decryptedToken.toString('utf8'));
 
         return { token: encryptedToken.toString('hex') };
     }),
     getEvents: t.procedure.query(async ({ ctx: { currentUser } }) => {
         if (!currentUser) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
-
         return sampleEvents;
     }),
 });

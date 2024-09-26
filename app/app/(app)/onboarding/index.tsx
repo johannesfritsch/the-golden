@@ -65,7 +65,7 @@ const Onboarding = () => {
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 10 }}>Welcome to The Golden</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>The Golden is an exclusive community of like-minded people. We offer best-in-class events in very exclusive venues for people to meet, relax and escape the ordinary.</CText>
-                                <Button style={{ marginBottom: 30 }} chevron caption='More on our venues' onClick={() => {
+                                <Button style={{ marginBottom: 30, paddingHorizontal: 50 }} chevron caption='' onClick={() => {
                                     setCurrentSlide(1);
                                 }} />
                                 <Pressable onPress={() => setCurrentSlide(4)}><CText type='bold' style={{ textAlign: 'center' }}>Skip introduction</CText></Pressable>
@@ -73,28 +73,28 @@ const Onboarding = () => {
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 10 }}>Extraordinary Venues</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>The Golden takes you to extraordinary venues that go beyond the expected—exclusive locations chosen for their beauty, uniqueness, and rarity.</CText>
-                                <Button chevron caption='More on Curated Elegance' onClick={() => {
+                                <Button chevron caption='' style={{ paddingHorizontal: 50 }} onClick={() => {
                                     setCurrentSlide(2);
                                 }} />
                             </ContentSlider.Item>
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 10 }}>Curated Elegance</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>Each location is transformed with thoughtful details into an effortless yet unforgettable memory. On top of that, our events come with a well thought-of schedule of exclusive activites.</CText>
-                                <Button chevron caption='More on our guests' onClick={() => {
+                                <Button chevron caption='' style={{ paddingHorizontal: 50 }} onClick={() => {
                                     setCurrentSlide(3);
                                 }} />
                             </ContentSlider.Item>
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 20 }}>Most Exclusive Guest Lists</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>At The Golden, our guest lists are peer-reviewed, ensuring every event brings together a remarkable circle of influential individuals.</CText>
-                                <Button chevron style={{ marginBottom: 20 }} caption="Let's set you up" onClick={() => {
+                                <Button chevron style={{ marginBottom: 20, paddingHorizontal: 50 }} caption="" onClick={() => {
                                     setCurrentSlide(4);
                                 }} />
                             </ContentSlider.Item>
                             <ContentSlider.Item>
                                 <CText type='h1' style={{ textAlign: 'center', marginBottom: 20 }}>Already got an Aura?</CText>
                                 <CText type='normal' style={{ textAlign: 'center', marginBottom: 40 }}>Auras are your key to the world of The Golden's exclusive events. They are exquisite jewelry pieces, seamlessly integrated with ultra-secure NFC technology.</CText>
-                                <Button chevron style={{ marginBottom: 30 }} caption="Get your own Aura" onClick={() => {
+                                <Button style={{ marginBottom: 30 }} caption="Get your own Aura" onClick={() => {
                                     router.navigate('/waitlist');
                                 }} />
                                 <Pressable onPress={() => router.navigate('/events')}><CText type='bold' style={{ textAlign: 'center' }}>Already got an Aura</CText></Pressable>

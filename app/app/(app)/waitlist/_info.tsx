@@ -21,7 +21,7 @@ const WaitlistInfo = ({ onJoin }: WaitListInfoProps) => {
   const { mutateAsync: enterWaitlist } = trpc.enterWaitlist.useMutation();
 
   return (
-    <Layout topElement={<Header leftButton='back' rightButton='none' />} bottomElement={<BottomBar><Button caption='Join the waitlist' onClick={() => setIsFormVisible(true)} /></BottomBar>}>
+    <Layout topElement={<Header leftButton='back' rightButton={{ type: 'none' }} />} bottomElement={<BottomBar><Button caption='Join the waitlist' style={{ width: '100%' }} onClick={() => setIsFormVisible(true)} /></BottomBar>}>
       <ScrollView style={{ flex: 1, width: '100%', height: '100%', backgroundColor: 'white', paddingTop: insets.top, paddingBottom: insets.bottom }}>
         <CText type='h1' style={{ marginBottom: 20 }}>Early Access Program</CText>
         <CText type='normal' style={{ marginBottom: 20 }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
@@ -34,7 +34,7 @@ const WaitlistInfo = ({ onJoin }: WaitListInfoProps) => {
       <Modal visible={isFormVisible} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setIsFormVisible(false)}>
         <ModalLayout onClose={() => setIsFormVisible(false)}>
           <WaitlistForm onSubmit={async (values) => {
-            await enterWaitlist();
+            await enterWaitlist({ ...values });
             console.log('After enterWaitlist');
             onJoin(values);
             setIsFormVisible(false);
