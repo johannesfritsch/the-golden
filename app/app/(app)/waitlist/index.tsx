@@ -9,13 +9,14 @@ import Header from '@/components/Header';
 
 const Waitlist = () => {
     const { data, isFetching, error, refetch } = trpc.getWaitlistStatus.useQuery();
+    const [confetti, setConfetti] = React.useState(false);
 
     useFocusEffect(useCallback(() => {
         refetch();
     }, []));
 
-    if (!isFetching && data && data.waitlistEntered) return <WaitlistStatus refetch={refetch} status={data} onLeave={() => refetch()} />;
-    if (!isFetching && data && !data.waitlistEntered) return <WaitlistInfo onJoin={() => refetch()} />;
+    if (!isFetching && data && data.waitlistEntered) return <WaitlistStatus confetti={confetti} refetch={refetch} status={data} onLeave={() => refetch()} />;
+    if (!isFetching && data && !data.waitlistEntered) return <WaitlistInfo onJoin={() => { setConfetti(true); refetch(); }} />;
 
     if (error) return <CText type='h1'>An error has occurred: {error.message}</CText>;
 

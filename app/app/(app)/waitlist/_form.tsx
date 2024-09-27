@@ -46,8 +46,7 @@ const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
         <View style={{ height: '100%' }}>
             <Formik<WaitlistFormData>
                 initialValues={{ gender: null, ageGroup: null, countryISO: null }}
-                onSubmit={(values) => onSubmit(values as WaitlistFormValues)}
-            >
+                onSubmit={(values) => onSubmit(values as WaitlistFormValues)}>
                 {({ handleChange, handleSubmit, values }) => (
                     <View style={{ height: '100%' }}>
                         <View>
@@ -71,7 +70,6 @@ const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
                             <Button chevron style={{ width: '100%' }} disabled={!values.gender || !values.ageGroup || !values.countryISO} onClick={handleSubmit} caption='Join our Early Access Program' />
                         </View>
                     </View>
-
                 )}
             </Formik>
         </View>

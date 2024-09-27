@@ -28,7 +28,7 @@ const WaitlistInfo = ({ onJoin }: WaitListInfoProps) => {
         <View style={{ marginVertical: 25, gap: 25, paddingTop: 5, paddingBottom: 30 }}>
           <PropertyView icon='dollar-sign' title='100% Free' description='Joining the waitlist costs nothing. No upfront payments. Only if you later choose to buy an Aura, you will be charged.' />
           <PropertyView icon='sun' title='No obligations' description='There are absolutely no strings attached when you join the waitlist. You’re not committed to anything.' />
-          <PropertyView icon='coffee' title='Insider updates' description='By joining, you’ll be among the first to receive exclusive updates, including early access to event announcements and special offers.' />
+          <PropertyView icon='coffee' title='Regular updates' description='You receive push notifications whenever your position changes significantly. Also we keep you informed about news about The Golden.' />
         </View>
       </ScrollView>
       <Modal visible={isFormVisible} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setIsFormVisible(false)}>

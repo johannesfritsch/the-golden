@@ -23,3 +23,5 @@ declare module 'react-native-config' {
     export const Config: NativeConfig
     export default Config
 }
+
+declare module 'react-native-confetti';
