@@ -1,7 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { router, Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -24,6 +24,7 @@ import { crc32, decrypt } from 'react-native-ntag-424/src/services/crypto';
 import { AppState } from 'react-native';
 import Config from "react-native-config";
 import { apiBaseUrl } from '@/utils/config';
+import { Notifications } from 'react-native-notifications';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -97,11 +98,6 @@ export default function RootLayout() {
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (appState.current === 'active' && nextAppState.match(/inactive|background/)) {
-        console.log('===== App has gone to the background, removing PIN =====');
-        console.log('===== App has gone to the background, removing PIN =====');
-        console.log('===== App has gone to the background, removing PIN =====');
-        console.log('===== App has gone to the background, removing PIN =====');
-        console.log('===== App has gone to the background, removing PIN =====');
         AsyncStorage.removeItem('pin');
       }
       appState.current = nextAppState;
@@ -132,6 +128,27 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+
+      Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
+        console.log(`Notification received in foreground: ${notification.title} : ${notification.body}`);
+        completion({ alert: false, sound: false, badge: false });
+      });
+
+      Notifications.events().registerNotificationOpened((notification, completion) => {
+        console.log(`Notification opened: ${notification.payload}`);
+        completion();
+      });
+
+      Notifications.ios.checkPermissions().then((currentPermissions) => {
+        console.log('Badges enabled: ' + !!currentPermissions.badge);
+        console.log('Sounds enabled: ' + !!currentPermissions.sound);
+        console.log('Alerts enabled: ' + !!currentPermissions.alert);
+        console.log('Car Play enabled: ' + !!currentPermissions.carPlay);
+        console.log('Critical Alerts enabled: ' + !!currentPermissions.criticalAlert);
+        console.log('Provisional enabled: ' + !!currentPermissions.provisional);
+        console.log('Provides App Notification Settings enabled: ' + !!currentPermissions.providesAppNotificationSettings);
+        console.log('Announcement enabled: ' + !!currentPermissions.announcement);
+      });
     }
   }, [loaded]);
 

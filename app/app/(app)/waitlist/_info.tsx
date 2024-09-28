@@ -4,12 +4,13 @@ import CText from '@/components/CText'
 import { PropertyView } from '@/components/PropertyView';
 import Header from '@/components/Header';
 import Layout from '@/components/Layout';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import WaitlistForm, { WaitlistFormData } from './_form';
 import ModalLayout from '@/components/ModalLayout';
 import { trpc } from '@/utils/trpc';
+import { Notifications } from 'react-native-notifications';
 
 export type WaitListInfoProps = {
   onJoin: (values: WaitlistFormData) => void
@@ -34,6 +35,7 @@ const WaitlistInfo = ({ onJoin }: WaitListInfoProps) => {
       <Modal visible={isFormVisible} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setIsFormVisible(false)}>
         <ModalLayout onClose={() => setIsFormVisible(false)}>
           <WaitlistForm onSubmit={async (values) => {
+            console.log('Before enterWaitlist', values);
             await enterWaitlist({ ...values });
             console.log('After enterWaitlist');
             onJoin(values);

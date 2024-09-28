@@ -45,7 +45,7 @@ const WaitlistStatus = ({ confetti, status, onLeave, refetch }: { confetti: bool
                     android: 'ic_menu_set_as',
                 },
                 onPress: () => {
-                    setReferralModalOpen(true);
+                    setCodeModalOpen(true);
                 },
             }, {
                 title: 'Leave the waitlist',

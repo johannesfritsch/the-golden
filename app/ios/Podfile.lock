@@ -1056,6 +1056,8 @@ PODS:
     - React
   - react-native-nfc-manager (3.16.0):
     - React-Core
+  - react-native-notifications (5.1.0):
+    - React-Core
   - react-native-quick-base64 (2.1.2):
     - DoubleConversion
     - glog
@@ -1407,6 +1409,8 @@ PODS:
     - Yoga
   - RNLocalize (3.2.1):
     - React-Core
+  - RNPermissions (4.1.5):
+    - React-Core
   - RNReanimated (3.10.1):
     - DoubleConversion
     - glog
@@ -1517,6 +1521,7 @@ DEPENDENCIES:
   - react-native-fast-rsa (from `../../node_modules/react-native-fast-rsa`)
   - "react-native-menu (from `../../node_modules/@react-native-menu/menu`)"
   - react-native-nfc-manager (from `../../node_modules/react-native-nfc-manager`)
+  - react-native-notifications (from `../../node_modules/react-native-notifications`)
   - react-native-quick-base64 (from `../../node_modules/react-native-quick-base64`)
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
@@ -1550,6 +1555,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../../node_modules/react-native-localize`)
+  - RNPermissions (from `../../node_modules/react-native-permissions`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1666,6 +1672,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@react-native-menu/menu"
   react-native-nfc-manager:
     :path: "../../node_modules/react-native-nfc-manager"
+  react-native-notifications:
+    :path: "../../node_modules/react-native-notifications"
   react-native-quick-base64:
     :path: "../../node_modules/react-native-quick-base64"
   react-native-quick-crypto:
@@ -1732,6 +1740,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-gesture-handler"
   RNLocalize:
     :path: "../../node_modules/react-native-localize"
+  RNPermissions:
+    :path: "../../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../../node_modules/react-native-reanimated"
   RNScreens:
@@ -1794,6 +1804,7 @@ SPEC CHECKSUMS:
   react-native-fast-rsa: f1d0063bcb8cd2ec5e04d28b12b928d235c269fb
   react-native-menu: c30eb7a85d7b04d51945f61ea8a8986ed366ac5c
   react-native-nfc-manager: 1bcdf6f96c9065a8f4c8d9a0c6fb2db625205b2c
+  react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-quick-base64: a74c4b2607b9de016877a8edb776b6ac59785809
   react-native-quick-crypto: 7085e4e4607e7e8fa57f4193f994d5262d351e45
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
@@ -1828,6 +1839,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 55264dd7cc939dad6e9c231a7621311f5277f1dc
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
+  RNPermissions: 5b96247c15864f9d89d7f51eeb0f2b736a2b212d
   RNReanimated: 5867f1c9dcd17f2fccd7bc5def4b7c60cde1d21a
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
@@ -1838,6 +1850,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
 
-PODFILE CHECKSUM: d2f2619b7f2db0087bf7cd4a01fcba3fcddf58c5
+PODFILE CHECKSUM: d0085e06dfe06b15d9f5fbfd747ed853edc34f86
 
 COCOAPODS: 1.15.2

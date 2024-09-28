@@ -72,6 +72,7 @@ const appRouter = t.router({
             ageGroup: z.enum(['18-25', '26-35', '36-45', '46-55', '56-65', '66-75', '76-85', '86-95', 'other']),
             gender: z.enum(['f', 'm', 'o']),
             countryISO: z.string().length(2),
+            pushToken: z.string(),
         }))
         .mutation(async ({ input, ctx: { currentDevice } }) => {
             const countryName = i18nCountries.getName(input.countryISO, 'en');
@@ -145,6 +146,10 @@ const appRouter = t.router({
         if (!currentUser) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
         return sampleEvents;
     }),
+    registerPushToken: t.procedure.input(z.object({ token: z.string() })).mutation(async ({ input: { token }, ctx: { currentDevice } }) => {
+        await db.insertInto('push_tokens').values({ deviceUniqueId: currentDevice.id, token }).onConflict(c => c.doNothing()).execute();
+        return { success: true };
+    }),
 });
 
 const app = express();
@@ -161,4 +166,4 @@ app.listen(parseInt(process.env.PORT as string), () => {
 
 export type AppRouter = typeof appRouter;
 
-createFaker();
+// createFaker();

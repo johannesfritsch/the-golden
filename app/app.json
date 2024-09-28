@@ -33,7 +33,15 @@
     },
     "plugins": [
       "expo-router",
-      "react-native-nfc-manager"
+      "react-native-nfc-manager",
+      [
+        "react-native-permissions",
+        {
+          "iosPermissions": [
+            "Notifications"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
