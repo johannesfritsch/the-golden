@@ -56,19 +56,13 @@ export interface LoginSessions {
   randA: string;
 }
 
-export interface PushTokens {
-  createdAt: Generated<Timestamp>;
-  deviceUniqueId: string;
-  token: string;
-  updatedAt: Generated<Timestamp>;
-}
-
 export interface WaitlistMembers {
   ageGroup: WaitlistAgeGroup;
   countryISO: string;
   createdAt: Generated<Timestamp>;
   deviceUniqueId: string;
   gender: WaitlistGender;
+  pushToken: string;
   updatedAt: Generated<Timestamp>;
 }
 
@@ -77,6 +71,5 @@ export interface DB {
   devices: Devices;
   login_pieces: LoginPieces;
   login_sessions: LoginSessions;
-  push_tokens: PushTokens;
   waitlist_members: WaitlistMembers;
 }

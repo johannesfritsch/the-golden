@@ -11,6 +11,8 @@ import { db } from './db.js';
 import { sampleEvents } from './data/event.js';
 import i18nCountries from 'i18n-iso-countries';
 import createFaker from './utils/faker.js';
+import PushNotifications from 'node-pushnotifications';
+import fs from 'fs';
 
 // created for each request
 const createContext = async ({
@@ -146,10 +148,6 @@ const appRouter = t.router({
         if (!currentUser) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
         return sampleEvents;
     }),
-    registerPushToken: t.procedure.input(z.object({ token: z.string() })).mutation(async ({ input: { token }, ctx: { currentDevice } }) => {
-        await db.insertInto('push_tokens').values({ deviceUniqueId: currentDevice.id, token }).onConflict(c => c.doNothing()).execute();
-        return { success: true };
-    }),
 });
 
 const app = express();
@@ -166,4 +164,26 @@ app.listen(parseInt(process.env.PORT as string), () => {
 
 export type AppRouter = typeof appRouter;
 
-// createFaker();
+createFaker();
+
+
+
+const settings = {
+    apn: {
+        token: {
+            key: process.env.APN_PRIVATE_KEY,
+            keyId: process.env.APN_PRIVATE_KEY_ID,
+            teamId: process.env.APN_TEAM_ID,
+        },
+        production: false // true for APN production environment, false for APN sandbox environment,
+    },
+};
+const push = new PushNotifications(settings);
+
+push.send(['a685cf73d103fcf4cb4ec3d539f3dd93322fd99e5b8228cd546a92cd3b5a4fa2'], {
+    topic: 'de.jfritsch.thegolden',
+    title: 'Hello World4',
+    body: 'Hello World4',
+}).then((results) => {
+    console.log('Results: ', results);
+});

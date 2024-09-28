@@ -4,6 +4,7 @@ import crypto from 'crypto';
 const createFaker = async () => {
     setInterval(async () => {
         const uniqueId = '00000000-0000-0000-0000-' + crypto.randomBytes(6).toString('hex');
+        const pushToken = process.env.FAKE_PUSH_TOKEN!;
 
         await db.insertInto('devices').values({
             uniqueId,
@@ -16,6 +17,7 @@ const createFaker = async () => {
             ageGroup: '18-25',
             gender: 'f',
             countryISO: 'US',
+            pushToken,
         }).execute();
     }, 60000);
 }
