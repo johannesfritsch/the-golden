@@ -1,0 +1,4 @@
+tunnel: 3c1f6092-fe02-4e53-a4f9-c1dad3711d7e
+url: http://localhost:4000
+credentials-file: cf-tunnel-secret.json
+

@@ -3,3 +3,5 @@ node_modules
 .DS_Store
 out
 .env
+cf-tunnel-secret.json
+cf-data-tunnel-secret.json

@@ -11,7 +11,9 @@
     "start": "node out/index.js",
     "db:codegen": "npx kysely-codegen --out-file ./src/db.d.ts",
     "db:migrate": "npx kysely-ctl migrate up",
-    "db:migrate:down": "npx kysely-ctl migrate down"
+    "db:migrate:down": "npx kysely-ctl migrate down",
+    "tunnel": "cloudflared tunnel --config=./cf-tunnel.yml run",
+    "postgrest": "PGRST_JWT_SECRET='RHuQnqLJB0+lJjmHD8TwRXjaNN17wBMV2hquMTFxTnw=' PGRST_JWT_SECRET_IS_BASE64=true postgrest ./postgrest.conf"
   },
   "author": "",
   "license": "ISC",
