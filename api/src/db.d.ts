@@ -9,6 +9,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type ProvisionValueType = "absolute" | "percent";
+
 export type Timestamp = ColumnType<Date, Date | string>;
 
 export type WaitlistAgeGroup = "18-25" | "26-35" | "36-45" | "46-55" | "56-65" | "66-75" | "76-85" | "86-95" | "other";
@@ -56,6 +58,58 @@ export interface LoginSessions {
   randA: string;
 }
 
+export interface ReferralCodes {
+  autoExtend: Generated<boolean>;
+  code: string;
+  eventDiscount: Generated<number>;
+  eventDiscountDescription: string | null;
+  eventDiscountName: string | null;
+  extensionPeriodLength: Generated<number>;
+  extensionPrice: Generated<number>;
+  id: Generated<string>;
+  initialPeriodLength: Generated<number>;
+  initialPrice: Generated<number>;
+  referrerId: string | null;
+  waitlistMemberId: string | null;
+}
+
+export interface ReferrerAddresses {
+  city: string;
+  countryISO: string;
+  id: Generated<string>;
+  nameLine1: string;
+  nameLine2: string | null;
+  referrerId: string;
+  street: string;
+  zip: string;
+}
+
+export interface ReferrerBankDetails {
+  bankName: string;
+  bic: string;
+  iban: string;
+  id: Generated<string>;
+  referrerId: string;
+}
+
+export interface ReferrerContacts {
+  email: string;
+  id: Generated<string>;
+  name: string;
+  phone: string;
+  referrerId: string;
+}
+
+export interface Referrers {
+  extensionProvision: number;
+  extensionProvisionType: ProvisionValueType;
+  id: Generated<string>;
+  initialProvision: number;
+  initialProvisionType: ProvisionValueType;
+  maxProvisionDuration: number;
+  name: string;
+}
+
 export interface WaitlistMembers {
   ageGroup: WaitlistAgeGroup;
   countryISO: string;
@@ -71,5 +125,10 @@ export interface DB {
   devices: Devices;
   login_pieces: LoginPieces;
   login_sessions: LoginSessions;
+  referral_codes: ReferralCodes;
+  referrer_addresses: ReferrerAddresses;
+  referrer_bank_details: ReferrerBankDetails;
+  referrer_contacts: ReferrerContacts;
+  referrers: Referrers;
   waitlist_members: WaitlistMembers;
 }

@@ -12,7 +12,6 @@ import { sampleEvents } from './data/event.js';
 import i18nCountries from 'i18n-iso-countries';
 import createFaker from './utils/faker.js';
 import PushNotifications from 'node-pushnotifications';
-import fs from 'fs';
 
 // created for each request
 const createContext = async ({
@@ -158,6 +157,7 @@ app.use(
         createContext,
     }),
 );
+
 app.listen(parseInt(process.env.PORT as string), () => {
     console.log(`Server started on http://localhost:${process.env.PORT}`);
 });

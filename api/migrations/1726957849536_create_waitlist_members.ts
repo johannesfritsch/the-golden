@@ -2,7 +2,7 @@ import { sql, type Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema
-		.createType("waitlist_age_group")
+		.createType("waitlist_member_age_group")
 		.asEnum([
 			'18-25',
 			'26-35',
@@ -17,7 +17,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.execute();
 
 	await db.schema
-		.createType("waitlist_gender")
+		.createType("waitlist_member_gender")
 		.asEnum([
 			'm',
 			'f',
@@ -31,8 +31,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addForeignKeyConstraint('waitlist_members_fk_deviceUniqueId', ['deviceUniqueId'], 'devices', ['uniqueId'], fk => fk.onDelete('cascade'))
 		.addPrimaryKeyConstraint('waitlist_members_pk', ['deviceUniqueId'])
 		// Infos
-		.addColumn('ageGroup', sql`waitlist_age_group`, col => col.notNull())
-		.addColumn('gender', sql`waitlist_gender`, col => col.notNull())
+		.addColumn('ageGroup', sql`waitlist_member_age_group`, col => col.notNull())
+		.addColumn('gender', sql`waitlist_member_gender`, col => col.notNull())
 		.addColumn('country', 'varchar(2)', col => col.notNull())
 		// Timestamps
 		.addColumn('createdAt', 'timestamp', col => col.notNull().defaultTo(sql`now()`))
