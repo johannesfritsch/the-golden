@@ -33,7 +33,7 @@ const WaitlistInfo = ({ onJoin }: WaitListInfoProps) => {
         </View>
       </ScrollView>
       <Modal visible={isFormVisible} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setIsFormVisible(false)}>
-        <ModalLayout onClose={() => setIsFormVisible(false)}>
+        <ModalLayout closeIcon={false} onClose={() => setIsFormVisible(false)}>
           <WaitlistForm onSubmit={async (values) => {
             console.log('Before enterWaitlist', values);
             await enterWaitlist({ ...values });

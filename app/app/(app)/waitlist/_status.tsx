@@ -11,24 +11,23 @@ import { Alert, Modal, Pressable, Share, View } from 'react-native'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { GetWaitlistStatusReturnValue } from '@the-golden-foundation/api'
 import Confetti from 'react-native-confetti'
-import { Feather } from '@expo/vector-icons'
-import Clipboard from '@react-native-clipboard/clipboard'
-import * as Haptics from 'expo-haptics';
+import ShareCodeModal from './_shareCodeModal'
+import EnterCodeModal from './_enterCodeModal'
+import { router, useLocalSearchParams } from 'expo-router'
 
-const WaitlistStatus = ({ confetti, status, onLeave, refetch }: { confetti: boolean, refetch: () => void, status: GetWaitlistStatusReturnValue, onLeave: () => void }) => {
+const WaitlistStatus = ({ showConfetti, status, onLeave, refetch, onConfettiEnded, onCodeEntered }: { showConfetti: boolean, onConfettiEnded: () => void, onCodeEntered: () => void, refetch: () => void, status: GetWaitlistStatusReturnValue, onLeave: () => void }) => {
     const [informationModalOpen, setInfoModalOpen] = useState(false);
     const [referralModalOpen, setReferralModalOpen] = useState(false);
     const [codeModalOpen, setCodeModalOpen] = useState(false);
     const { mutateAsync: leaveWaitlist } = trpc.leaveWaitlist.useMutation();
-    const { data } = trpc.getReferralCode.useQuery();
     const confettiRef = React.useRef<any>(null);
-    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        if (confetti) {
+        if (showConfetti) {
             confettiRef.current.startConfetti();
+            onConfettiEnded();
         }
-    });
+    }, [showConfetti]);
 
     return (
         <Layout refetch={refetch} topElement={<Header leftButton='back' rightButton={{
@@ -78,23 +77,21 @@ const WaitlistStatus = ({ confetti, status, onLeave, refetch }: { confetti: bool
                     <Confetti ref={confettiRef} confettiCount={80} colors={["#B29146", "#333333", '#CCCCCC']} duration={1000} size={2} radius={2} />
                     <View style={{ marginTop: 50 }}>
                         <CText type='h1' style={{ marginBottom: 20, textAlign: 'center' }}>Your Waitlist Position</CText>
-                        <CText type='normal' style={{ marginBottom: 30, textAlign: 'center' }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
+                        <CText type='normal' style={{ marginBottom: 20, textAlign: 'center' }}>To ensure the best possible experience for all users, we moderate the flow of users into the app. But rest assured, that we are working hard to remove this limit as soon as possible.</CText>
+                        <Pressable style={{ marginBottom: 40 }} onPress={() => setInfoModalOpen(true)}>
+                            <CText type='link' style={{ textAlign: 'center' }}>More information</CText>
+                        </Pressable>
                         <View style={{ marginBottom: 20 }}>
-                            <CText type='h0' style={{ textAlign: 'center' }}>{status.waitlistPosition}</CText>
+                            <CText type='h0' style={{ textAlign: 'center' }}># {status.waitlistPosition}</CText>
                         </View>
                         <CText type='normal' style={{ marginBottom: 20, textAlign: 'center' }}>Estimated waiting time: {status.estimatedTimeRemaining < 24 * 60 * 60 * 1000 ? 'very soon' : formatDuration(intervalToDuration({ start: 0, end: status.estimatedTimeRemaining }), { format: ['days'] })}</CText>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
-                            <Pressable onPress={() => setInfoModalOpen(true)}>
-                                <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>Information</CText>
-                            </Pressable>
-                            <Pressable onPress={() => setCodeModalOpen(true)}>
-                                <CText type='underline' style={{ marginBottom: 20, textAlign: 'center' }}>I got a code</CText>
-                            </Pressable>
-                        </View>
+                        <Pressable onPress={() => setCodeModalOpen(true)}>
+                            <CText type='link' style={{ textAlign: 'center' }}>Enter a code now</CText>
+                        </Pressable>
                         <Modal visible={informationModalOpen} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setInfoModalOpen(false)}>
                             <ModalLayout onClose={() => setInfoModalOpen(false)}>
                                 <CText type='h1' style={{ marginBottom: 20 }}>Your Waitlist Status</CText>
-                                <CText type='normal' style={{ marginBottom: 30 }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
+                                <CText type='normal' style={{ marginBottom: 30 }}>To ensure the best possible experience for all users, we moderate the flow of users into the app. But rest assured, that we are working hard to remove this limit as soon as possible.</CText>
                                 <PropertyView style={{ marginBottom: 25 }} icon={'search'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
                                 <PropertyView style={{ marginBottom: 25 }} icon={'code'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
                                 <PropertyView style={{ marginBottom: 25 }} icon={'heart'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
@@ -102,56 +99,12 @@ const WaitlistStatus = ({ confetti, status, onLeave, refetch }: { confetti: bool
                         </Modal>
                         <Modal visible={referralModalOpen} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setReferralModalOpen(false)}>
                             <ModalLayout onClose={() => setReferralModalOpen(false)}>
-                                <CText type='h1' style={{ marginBottom: 20 }}>Refer Friends, Skip the Wait</CText>
-                                <CText type='normal' style={{ marginBottom: 30 }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
-
-
-
-                                <PropertyView style={{ marginBottom: 25 }} icon={'search'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
-                                <PropertyView style={{ marginBottom: 25 }} icon={'code'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
-                                <PropertyView style={{ marginBottom: 40 }} icon={'heart'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
-
-                                <CText type='normal' style={{ marginBottom: 30 }}>You can pass the following code to a friend. This gives both of you a boost in our waitlist.</CText>
-                                <Pressable onPress={() => {
-                                    if (copied || !data?.referralCode) return;
-                                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                                    Clipboard.setString(data?.referralCode);
-                                    setCopied(true);
-                                    setInterval(() => {
-                                        setCopied(false);
-                                    }, 2000);
-                                }} style={{ backgroundColor: '#CCC', marginHorizontal: 60, marginBottom: 40, justifyContent: 'center', alignItems: 'center', padding: 10, borderRadius: 10, flexDirection: 'row' }}>
-                                    <CText type='h3' style={{ flexGrow: 1, textAlign: 'center' }}>{data?.referralCode}</CText>
-                                    {!copied && (<Feather name='copy' size={20} color='#666' />)}
-                                    {copied && (<Feather name='check' size={20} color='green' />)}
-                                </Pressable>
-
-                                <Button style={{ width: '100%' }} caption='Share The Golden now' onClick={() => {
-                                    Share.share({
-                                        message: `🚀 Join me on The Golden! 🏆
-
-Discover exclusive 3-day luxury getaways packed with exciting events, all tailored for unforgettable experiences. Use my code [${data?.referralCode}] when you sign up to unlock special offers!
-
-Download the app now:
-
-	•	iPhone: [iPhone App Link]
-	•	Android: [Android App Link]
-
-Let’s embark on a golden adventure together! 🌟`,
-                                        url: 'https://www.google.de',
-                                        title: '🚀 Join me on The Golden! 🏆',
-                                    }, {
-
-                                    })
-                                }} />
+                                <ShareCodeModal />
                             </ModalLayout>
                         </Modal>
                         <Modal visible={codeModalOpen} animationType="slide" presentationStyle="formSheet" onRequestClose={() => setCodeModalOpen(false)}>
                             <ModalLayout onClose={() => setCodeModalOpen(false)}>
-                                <CText type='h1' style={{ marginBottom: 20 }}>Got a code?</CText>
-                                <CText type='normal' style={{ marginBottom: 30 }}>If you have received a code, you can enter it here. It will skip the whole or parts of the waitlist for you.</CText>
-
-                                <Button caption='Redeem code' onClick={() => { }} />
+                                <EnterCodeModal onCodeEntered={onCodeEntered} />
                             </ModalLayout>
                         </Modal>
 

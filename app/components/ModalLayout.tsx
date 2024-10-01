@@ -5,17 +5,18 @@ import { Platform, SafeAreaView, Text, View } from 'react-native'
 export type ModalLayoutProps = {
     children: React.ReactNode
     onClose: () => void
+    closeIcon?: boolean
 }
 
-const ModalLayout = ({ children, onClose }: ModalLayoutProps) => {
+const ModalLayout = ({ children, onClose, closeIcon = true }: ModalLayoutProps) => {
     return (
         <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
             <SafeAreaView>
                 <View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
-                    <View style={{ marginBottom: 30 }}>
+                    {closeIcon && (<View style={{ marginBottom: 30 }}>
                         <AntDesign name="close" size={24} color="black" onPress={onClose} />
-                    </View>
+                    </View>)}
                     {children}
                 </View>
             </SafeAreaView>

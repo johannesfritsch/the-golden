@@ -8,6 +8,7 @@ import i18nCountries from 'i18n-iso-countries/langs/en.json';
 import BoxSelector from '@/components/BoxSelector';
 import { Notifications, Registered, RegistrationError } from 'react-native-notifications';
 import { check, checkNotifications } from 'react-native-permissions'
+import PageControl from '@/components/PageControl';
 
 const genders = {
     'm': 'Male',
@@ -93,6 +94,9 @@ const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
 
     if (page === WaitlistFormPage.FORM) return (
         <View style={{ height: '100%' }}>
+            <View style={{ marginBottom: 20 }}>
+                <PageControl currentPage={0} totalPages={2} />
+            </View>
             <Formik<WaitlistFormData>
                 initialValues={{ gender: null, ageGroup: null, countryISO: null }}
                 onSubmit={(values) => {
@@ -128,6 +132,9 @@ const WaitlistForm = ({ onSubmit }: WaitlistFormProps) => {
     );
 
     return <View>
+        <View style={{ marginBottom: 20 }}>
+            <PageControl currentPage={1} totalPages={2} />
+        </View>
         <CText type='h1' style={{ marginBottom: 10 }}>Push Notifications</CText>
         <CText type='normal' style={{ marginBottom: 40 }}>To keep you updated about your position in the waitlist, we need your permission to send you push notifications. You can disable them at any time in the settings.</CText>
         {userAllowedPN === 'NOT_ASKED' && (<Button style={{ width: '100%' }} onClick={async () => {

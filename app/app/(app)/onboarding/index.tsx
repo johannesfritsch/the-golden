@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ContentSlider from '@/components/ContentSlider'
 import VideoPlayer from '@/components/VideoPlayer'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import * as Haptics from 'expo-haptics'
 
 const videos = [
     require('@/assets/videos/closeup-arm-wrist.mp4'),
@@ -65,11 +66,15 @@ const Onboarding = () => {
             onPanResponderMove: (evt, gestureState) => {
                 if (handled) return;
                 if (gestureState.dx > 50 && currentSlide > 0) {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setCurrentSlide(currentSlide - 1);
                     setHandled(true);
+                    return;
                 } else if (gestureState.dx < -50 && currentSlide < 4) {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setCurrentSlide(currentSlide + 1);
                     setHandled(true);
+                    return;
                 }
             },
         })
@@ -115,7 +120,7 @@ const Onboarding = () => {
                                 <Button style={{ marginBottom: 30 }} caption="See buying options" onClick={() => {
                                     router.navigate('/waitlist');
                                 }} />
-                                <Pressable onPress={() => router.navigate('/events')}><CText type='bold' style={{ textAlign: 'center' }}>Already got an Aura</CText></Pressable>
+                                <Pressable onPress={() => router.navigate('/events')}><CText type='link' style={{ textAlign: 'center' }}>Already got an Aura</CText></Pressable>
                             </ContentSlider.Item>
                         </ContentSlider>
                     </View>

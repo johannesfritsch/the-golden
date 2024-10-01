@@ -14,7 +14,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { trpc } from '@/utils/trpc';
-import { httpLink } from '@trpc/client';
+import { httpLink, TRPCClientError } from '@trpc/client';
 import { getAndroidId, getBuildNumber, getDeviceId, getDeviceToken, getDeviceType, getInstanceId, getManufacturer, getSystemName, getSystemVersion, getUniqueId, getVersion, isTablet } from 'react-native-device-info'
 import rsa, { Hash } from 'react-native-fast-rsa'
 import { appKey } from '@/utils/appKey';
@@ -25,6 +25,7 @@ import { AppState } from 'react-native';
 import Config from "react-native-config";
 import { apiBaseUrl } from '@/utils/config';
 import { Notifications } from 'react-native-notifications';
+import { isErrorCode } from '@/utils/errors';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -108,12 +109,16 @@ export default function RootLayout() {
   const queryClient = useMemo(() => new QueryClient({
     queryCache: new QueryCache({
       onError: (error) => {
-        router.navigate('/auth/login');
+        if (isErrorCode(error, 'UNAUTHORIZED')) {
+          router.navigate('/auth/login');
+        }
       },
     }),
     mutationCache: new MutationCache({
       onError: (error) => {
-        router.navigate('/auth/login');
+        if (isErrorCode(error, 'UNAUTHORIZED')) {
+          router.navigate('/auth/login');
+        }
       },
     }),
     defaultOptions: {

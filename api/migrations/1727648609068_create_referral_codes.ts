@@ -26,6 +26,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn('waitlistBoost', 'integer')
 		// Rabatt pro Event (für PepperKunden 500€)
 		.addColumn('eventDiscount', 'integer')
+		.addColumn('eventDiscountType', sql`percent_or_absolute`)
 		// Bezeichnung Rabattierung (PepperParties-Rabatt)
 		.addColumn('eventDiscountName', 'text')
 		// Beschreibung Rabattierung (Erklärung wieso Rabatt)

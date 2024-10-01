@@ -15,8 +15,8 @@ const Waitlist = () => {
         refetch();
     }, []));
 
-    if (!isFetching && data && data.waitlistEntered) return <WaitlistStatus confetti={confetti} refetch={refetch} status={data} onLeave={() => refetch()} />;
-    if (!isFetching && data && !data.waitlistEntered) return <WaitlistInfo onJoin={() => { setConfetti(true); refetch(); }} />;
+    if (!isFetching && data && data.waitlistEntered) return <WaitlistStatus showConfetti={confetti} onCodeEntered={() => { refetch(); setConfetti(true); }} onConfettiEnded={() => setConfetti(false)} refetch={refetch} status={data} onLeave={() => refetch()} />;
+    if (!isFetching && data && !data.waitlistEntered) return <WaitlistInfo onJoin={() => { refetch(); setConfetti(true); }} />;
 
     if (error) return <CText type='h1'>An error has occurred: {error.message}</CText>;
 

@@ -2,7 +2,7 @@ import { sql, type Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema
-		.createType("provision_value_type")
+		.createType("percent_or_absolute")
 		.asEnum([
 			'percent',
 			'absolute',
@@ -15,11 +15,11 @@ export async function up(db: Kysely<any>): Promise<void> {
 		// Initiale provision (Pepper: 130)
 		.addColumn('initialProvision', 'integer', (c) => c.notNull())
 		// Initiale provision in Prozent oder absolut (Pepper: absolut)
-		.addColumn('initialProvisionType', sql`provision_value_type`, (c) => c.notNull())
+		.addColumn('initialProvisionType', sql`percent_or_absolute`, (c) => c.notNull())
 		// Verdient bei Verlängerung des Vertrags Betrag (Pepper: 0)
 		.addColumn('extensionProvision', 'integer', (c) => c.notNull())
 		// Verdient bei Verlängerung des Vertrags Betrag in Prozent oder absolut (Pepper: prozent)
-		.addColumn('extensionProvisionType', sql`provision_value_type`, (c) => c.notNull())
+		.addColumn('extensionProvisionType', sql`percent_or_absolute`, (c) => c.notNull())
 		// Maximale Provisionsdauer in Tagen (Pepper: 0)
 		.addColumn('maxProvisionDuration', 'integer', (c) => c.notNull()).execute();
 

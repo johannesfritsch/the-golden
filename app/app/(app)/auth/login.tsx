@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Rive from 'rive-react-native'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated'
+import * as Haptics from 'expo-haptics'
 
 const Login = () => {
     const insets = useSafeAreaInsets();
@@ -87,10 +88,12 @@ const Login = () => {
                     withTiming(-15, { duration: 50, easing: Easing.elastic(10) }),
                     withTiming(0, { duration: 50, easing: Easing.elastic(10) })
                 );
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
                 setTimeout(() => {
                     setPin('');
                 }, 250);
             } else {
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 AsyncStorage.setItem('token', token!);
                 AsyncStorage.setItem('pin', pin);
                 setTimeout(() => {
@@ -112,9 +115,9 @@ const Login = () => {
                 <View style={{ paddingHorizontal: 50 }}>
                     <Button chevron caption="Login with your Aura" onClick={handleScanPress} />
                 </View>
-                <Pressable onPress={() => { router.dismissAll(); router.navigate('/waitlist'); }}>
-                    <CText style={{ textAlign: 'center', marginTop: 20 }} type="normal">How to get an Aura</CText>
-                </Pressable>
+                <View style={{ paddingHorizontal: 50 }}>
+                    <Button type='secondary' chevron caption="How to get an Aura" onClick={() => { router.dismissAll(); router.navigate('/waitlist'); }} />
+                </View>
             </View>
         </View>
 

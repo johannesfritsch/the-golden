@@ -12,11 +12,11 @@ import { sampleEvents } from './data/event.js';
 import i18nCountries from 'i18n-iso-countries';
 import createFaker from './utils/faker.js';
 import PushNotifications from 'node-pushnotifications';
+import { sql } from 'kysely';
 
 // created for each request
 const createContext = async ({
     req,
-    res,
 }: trpcExpress.CreateExpressContextOptions) => {
     const deviceId = await verifyDeviceId(req);
     const token = req.headers['authorization']?.split(' ')[1];
@@ -60,12 +60,15 @@ const appRouter = t.router({
             }).returningAll().executeTakeFirst();
         }
 
-        return { referralCode: referralCode!.code };
+        return { referralCode: referralCode!.code.toUpperCase() };
     }),
     enterReferralCode: t.procedure.input(z.object({
         code: z.string().length(6),
     })).mutation(async ({ input: { code }, ctx: { currentDevice } }) => {
-        const referralCode = await db.selectFrom('referral_codes').selectAll().where('code', '=', code).executeTakeFirst();
+        console.log('enterReferralCode code currentDevice.id', code, code.trim().toLowerCase(), currentDevice.id);
+        const referralCode = await db.selectFrom('referral_codes').selectAll().where('code', 'ilike', code.trim().toLowerCase()).executeTakeFirst();
+        console.log('enterReferralCode referralCode', referralCode);
+        if (referralCode?.waitlistMemberId === currentDevice.id) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cannot redeem own referral code' });
         if (!referralCode) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid referral code' });
 
         try {
@@ -83,22 +86,45 @@ const appRouter = t.router({
         const waitlistMember = await db.selectFrom('waitlist_members').selectAll().where('deviceUniqueId', '=', currentDevice.id).executeTakeFirst();
         if (!waitlistMember) return { waitlistEntered: false };
 
-        const res = await db.with('waitlist_members', qb =>
-            qb.selectFrom('waitlist_members')
-                .selectAll()
-                .select(eb =>
-                    eb.fn.agg<number>('row_number', [])
-                        .over((ob) => ob.orderBy("createdAt", "asc")) // Add partition by if needed (ob.partitionBy('countryISO'))
-                        .as('rn'))
-                .orderBy('createdAt asc')
-        ).selectFrom('waitlist_members')
-            .select('rn')
-            .where('deviceUniqueId', '=', currentDevice.id)
-            .executeTakeFirst();
+        const res = await sql<{ rank: number }>`
+            WITH "member_boosts" AS (
+    SELECT
+        wm."deviceUniqueId",
+        wm."createdAt",
+        COALESCE(SUM(rc."waitlistBoost"), 0) AS total_boost
+    FROM
+        "waitlist_members" wm
+            LEFT JOIN
+        "referral_code_redemptions" rcr ON wm."deviceUniqueId" = rcr."waitlistMemberId"
+            LEFT JOIN
+        "referral_codes" rc ON rcr."referralCodeId" = rc.id
+    GROUP BY
+        wm."deviceUniqueId", wm."createdAt"
+),
+     "ranked_members" AS (
+         SELECT
+             "deviceUniqueId",
+             ROW_NUMBER() OVER (ORDER BY total_boost DESC, "createdAt" ASC) AS "rank"
+         FROM
+             "member_boosts"
+     )
+SELECT
+    "rank"
+FROM
+    "ranked_members"
+WHERE
+    "deviceUniqueId" = ${currentDevice.id};
+        `.execute(db);
+
+        console.log('getWaitlistStatus res', res);
+
+        if (!res || res.rows.length < 1) return { waitlistEntered: false };
+
+        res.rows[0];
 
         const admissionRate = 24 * 60 * 60 * 1000 / admissionsPerDay;
 
-        return { waitlistEntered: true, estimatedTimeRemaining: admissionRate * res!.rn, waitlistPosition: res!.rn };
+        return { waitlistEntered: true, estimatedTimeRemaining: admissionRate * res!.rows![0].rank, waitlistPosition: res!.rows![0].rank };
     }),
     enterWaitlist: t.procedure
         .input(z.object({
