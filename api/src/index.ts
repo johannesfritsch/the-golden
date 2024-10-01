@@ -47,23 +47,55 @@ export type GetWaitlistStatusReturnValue = {
 };
 
 const appRouter = t.router({
+    getReferralCode: t.procedure.query(async ({ ctx: { currentDevice } }) => {
+        if (!currentDevice) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Please login!' });
+
+        let referralCode = await db.selectFrom('referral_codes').selectAll().where('waitlistMemberId', '=', currentDevice.id).executeTakeFirst();
+
+        if (!referralCode) {
+            const code = crypto.randomBytes(3).toString('hex');
+            referralCode = await db.insertInto('referral_codes').values({
+                waitlistMemberId: currentDevice.id,
+                code,
+            }).returningAll().executeTakeFirst();
+        }
+
+        return { referralCode: referralCode!.code };
+    }),
+    enterReferralCode: t.procedure.input(z.object({
+        code: z.string().length(6),
+    })).mutation(async ({ input: { code }, ctx: { currentDevice } }) => {
+        const referralCode = await db.selectFrom('referral_codes').selectAll().where('code', '=', code).executeTakeFirst();
+        if (!referralCode) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid referral code' });
+
+        try {
+            await db.insertInto('referral_code_redemptions').values({
+                referralCodeId: referralCode.id,
+                waitlistMemberId: currentDevice.id,
+            }).execute();
+        } catch (e) {
+            throw new TRPCError({ code: 'BAD_REQUEST', message: 'Referral code already redeemed' });
+        }
+
+        return { success: true };
+    }),
     getWaitlistStatus: t.procedure.query(async ({ ctx: { currentDevice } }): Promise<GetWaitlistStatusReturnValue> => {
         const waitlistMember = await db.selectFrom('waitlist_members').selectAll().where('deviceUniqueId', '=', currentDevice.id).executeTakeFirst();
         if (!waitlistMember) return { waitlistEntered: false };
 
-        const res = await db.with('waitlist_members', qb => 
+        const res = await db.with('waitlist_members', qb =>
             qb.selectFrom('waitlist_members')
-            .selectAll()
-            .select(eb => 
-                eb.fn.agg<number>('row_number', [])
-                .over((ob) => ob.orderBy("createdAt", "asc")) // Add partition by if needed (ob.partitionBy('countryISO'))
-                .as('rn'))
-            .orderBy('createdAt asc')
+                .selectAll()
+                .select(eb =>
+                    eb.fn.agg<number>('row_number', [])
+                        .over((ob) => ob.orderBy("createdAt", "asc")) // Add partition by if needed (ob.partitionBy('countryISO'))
+                        .as('rn'))
+                .orderBy('createdAt asc')
         ).selectFrom('waitlist_members')
             .select('rn')
             .where('deviceUniqueId', '=', currentDevice.id)
             .executeTakeFirst();
-        
+
         const admissionRate = 24 * 60 * 60 * 1000 / admissionsPerDay;
 
         return { waitlistEntered: true, estimatedTimeRemaining: admissionRate * res!.rn, waitlistPosition: res!.rn };
@@ -78,7 +110,7 @@ const appRouter = t.router({
         .mutation(async ({ input, ctx: { currentDevice } }) => {
             const countryName = i18nCountries.getName(input.countryISO, 'en');
             if (!countryName) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid country code' });
-            
+
             await db.insertInto('waitlist_members').values({ deviceUniqueId: currentDevice.id, ...input }).execute();
             return { success: true };
         }),

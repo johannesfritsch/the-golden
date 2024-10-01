@@ -10,14 +10,19 @@ import React, { useEffect, useState } from 'react'
 import { Alert, Modal, Pressable, Share, View } from 'react-native'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { GetWaitlistStatusReturnValue } from '@the-golden-foundation/api'
-import Confetti from 'react-native-confetti';
+import Confetti from 'react-native-confetti'
+import { Feather } from '@expo/vector-icons'
+import Clipboard from '@react-native-clipboard/clipboard'
+import * as Haptics from 'expo-haptics';
 
 const WaitlistStatus = ({ confetti, status, onLeave, refetch }: { confetti: boolean, refetch: () => void, status: GetWaitlistStatusReturnValue, onLeave: () => void }) => {
     const [informationModalOpen, setInfoModalOpen] = useState(false);
     const [referralModalOpen, setReferralModalOpen] = useState(false);
     const [codeModalOpen, setCodeModalOpen] = useState(false);
     const { mutateAsync: leaveWaitlist } = trpc.leaveWaitlist.useMutation();
+    const { data } = trpc.getReferralCode.useQuery();
     const confettiRef = React.useRef<any>(null);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         if (confetti) {
@@ -99,14 +104,33 @@ const WaitlistStatus = ({ confetti, status, onLeave, refetch }: { confetti: bool
                             <ModalLayout onClose={() => setReferralModalOpen(false)}>
                                 <CText type='h1' style={{ marginBottom: 20 }}>Refer Friends, Skip the Wait</CText>
                                 <CText type='normal' style={{ marginBottom: 30 }}>To ensure the best possible experience for all users, we need to make sure that users are released into the app in regional chunks. We are working hard to remove this waitlist as soon as possible.</CText>
+
+
+
                                 <PropertyView style={{ marginBottom: 25 }} icon={'search'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
                                 <PropertyView style={{ marginBottom: 25 }} icon={'code'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
                                 <PropertyView style={{ marginBottom: 40 }} icon={'heart'} title={'Headline'} description={'To ensure the best possible experience for all users, we need to make sure that.'} />
+
+                                <CText type='normal' style={{ marginBottom: 30 }}>You can pass the following code to a friend. This gives both of you a boost in our waitlist.</CText>
+                                <Pressable onPress={() => {
+                                    if (copied || !data?.referralCode) return;
+                                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                                    Clipboard.setString(data?.referralCode);
+                                    setCopied(true);
+                                    setInterval(() => {
+                                        setCopied(false);
+                                    }, 2000);
+                                }} style={{ backgroundColor: '#CCC', marginHorizontal: 60, marginBottom: 40, justifyContent: 'center', alignItems: 'center', padding: 10, borderRadius: 10, flexDirection: 'row' }}>
+                                    <CText type='h3' style={{ flexGrow: 1, textAlign: 'center' }}>{data?.referralCode}</CText>
+                                    {!copied && (<Feather name='copy' size={20} color='#666' />)}
+                                    {copied && (<Feather name='check' size={20} color='green' />)}
+                                </Pressable>
+
                                 <Button style={{ width: '100%' }} caption='Share The Golden now' onClick={() => {
                                     Share.share({
                                         message: `🚀 Join me on The Golden! 🏆
 
-Discover exclusive 3-day luxury getaways packed with exciting events, all tailored for unforgettable experiences. Use my code [ABC123] when you sign up to unlock special offers!
+Discover exclusive 3-day luxury getaways packed with exciting events, all tailored for unforgettable experiences. Use my code [${data?.referralCode}] when you sign up to unlock special offers!
 
 Download the app now:
 

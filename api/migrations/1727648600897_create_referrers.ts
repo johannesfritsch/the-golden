@@ -49,5 +49,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-	await db.schema.dropTable('referrers');
+	await db.schema.dropTable('referrer_addresses').execute();
+	await db.schema.dropTable('referrer_bank_details').execute();
+	await db.schema.dropTable('referrer_contacts').execute();
+	await db.schema.dropTable('referrers').execute();
 }

@@ -58,18 +58,27 @@ export interface LoginSessions {
   randA: string;
 }
 
+export interface ReferralCodeRedemptions {
+  createdAt: Generated<Timestamp | null>;
+  referralCodeId: string;
+  updatedAt: Generated<Timestamp | null>;
+  waitlistMemberId: string;
+}
+
 export interface ReferralCodes {
-  autoExtend: Generated<boolean>;
+  autoExtend: boolean | null;
   code: string;
-  eventDiscount: Generated<number>;
+  eventDiscount: number | null;
   eventDiscountDescription: string | null;
   eventDiscountName: string | null;
-  extensionPeriodLength: Generated<number>;
-  extensionPrice: Generated<number>;
+  extensionPeriodLength: number | null;
+  extensionPrice: number | null;
   id: Generated<string>;
-  initialPeriodLength: Generated<number>;
-  initialPrice: Generated<number>;
+  initialPeriodLength: number | null;
+  initialPrice: number | null;
+  maxRedemptions: Generated<number>;
   referrerId: string | null;
+  waitlistBoost: number | null;
   waitlistMemberId: string | null;
 }
 
@@ -125,6 +134,7 @@ export interface DB {
   devices: Devices;
   login_pieces: LoginPieces;
   login_sessions: LoginSessions;
+  referral_code_redemptions: ReferralCodeRedemptions;
   referral_codes: ReferralCodes;
   referrer_addresses: ReferrerAddresses;
   referrer_bank_details: ReferrerBankDetails;
