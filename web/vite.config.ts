@@ -16,7 +16,7 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
-        theme_color: '#0ea5e9',
+        theme_color: '#ffffff',
         icons: [
           // Slim setup: rely on SVG icon already in public
           { src: '/vite.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }
