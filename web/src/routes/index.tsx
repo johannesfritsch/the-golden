@@ -11,25 +11,29 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <Feed /> },
-      { path: 'feed', element: <Feed /> },
+      { index: true, element: <Feed />, handle: { title: 'Feed' } },
+      { path: 'feed', element: <Feed />, handle: { title: 'Feed' } },
     ],
   },
   {
     path: '/login',
     element: <Login />,
+    handle: { title: 'Login' },
   },
   {
     path: '/tour',
     element: <Tour />,
+    handle: { title: 'Tour' },
   },
   {
     path: '/register',
     element: <Register />,
+    handle: { title: 'Register' },
   },
   {
     path: '/tap',
     element: <Tap />,
+    handle: { title: 'Tap' },
   },
 ])
 

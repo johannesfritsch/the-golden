@@ -1,9 +1,20 @@
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useMatches, useNavigationType } from 'react-router-dom'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { useEffect } from 'react'
 
 export default function AppLayout() {
+  const matches = useMatches()
+  const navType = useNavigationType()
+
+  useEffect(() => {
+    const appName = 'The Golden'
+    const activeWithTitle = [...matches].reverse().find(m => (m.handle as any)?.title)
+    const pageTitle = (activeWithTitle?.handle as any)?.title as string | undefined
+    document.title = pageTitle ? `${appName} | ${pageTitle}` : appName
+  }, [matches, navType])
+
   return (
     <div className="min-h-dvh flex flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">

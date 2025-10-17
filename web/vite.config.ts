@@ -12,7 +12,7 @@ export default defineConfig({
       devOptions: { enabled: false },
       manifest: {
         name: 'The Golden',
-        short_name: 'Golden',
+        short_name: 'The Golden',
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
