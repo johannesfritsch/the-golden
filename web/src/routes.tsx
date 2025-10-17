@@ -5,13 +5,18 @@ import Login from '@/pages/auth/Login'
 import Tour from '@/pages/marketing/Tour'
 import Register from '@/pages/auth/Register'
 import Tap from '@/pages/auth/Tap'
+import RootGate from '@/pages/RootGate'
 
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <RootGate />,
+    handle: { title: 'Loading' },
+  },
+  {
+    path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <Feed />, handle: { title: 'Feed' } },
       { path: 'feed', element: <Feed />, handle: { title: 'Feed' } },
     ],
   },

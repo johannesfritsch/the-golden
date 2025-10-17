@@ -1,12 +1,15 @@
-import { Outlet, Link, useMatches, useNavigationType } from 'react-router-dom'
+import { Outlet, Link, useMatches, useNavigationType, useNavigate } from 'react-router-dom'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function AppLayout() {
   const matches = useMatches()
   const navType = useNavigationType()
+  const navigate = useNavigate()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const appName = 'The Golden'
@@ -14,6 +17,21 @@ export default function AppLayout() {
     const pageTitle = (activeWithTitle?.handle as any)?.title as string | undefined
     document.title = pageTitle ? `${appName} | ${pageTitle}` : appName
   }, [matches, navType])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [menuOpen])
+
+  function handleLogout() {
+    localStorage.removeItem('loggedIn')
+    navigate('/', { replace: true })
+  }
 
   return (
     <div className="min-h-dvh flex flex-col">
@@ -42,13 +60,33 @@ export default function AppLayout() {
             </Sheet>
             <Link to="/" className="font-semibold">The Golden</Link>
           </div>
-          <div className="flex items-center gap-3">
-            <Button asChild variant="outline" size="sm">
-              <Link to="/login">Log in</Link>
-            </Button>
-            <Avatar className="size-8">
-              <AvatarFallback>GG</AvatarFallback>
-            </Avatar>
+          <div className="relative" ref={menuRef}>
+            <button
+              type="button"
+              aria-label="Open profile menu"
+              className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring/50"
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              <Avatar className="size-8">
+                <AvatarFallback>GG</AvatarFallback>
+              </Avatar>
+            </button>
+            {menuOpen ? (
+              <div
+                role="menu"
+                aria-label="Profile menu"
+                className="absolute right-0 mt-2 w-44 rounded-md border bg-popover text-popover-foreground shadow-md"
+              >
+                <div className="py-1">
+                  <button
+                    className="w-full px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                    onClick={handleLogout}
+                  >
+                    Log out
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </header>
