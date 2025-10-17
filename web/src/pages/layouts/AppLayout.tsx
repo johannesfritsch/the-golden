@@ -34,7 +34,7 @@ export default function AppLayout() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="min-h-lvh flex flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto w-full max-w-5xl px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -90,7 +90,7 @@ export default function AppLayout() {
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-5 sm:px-6 md:px-8">
         <Outlet />
       </main>
     </div>

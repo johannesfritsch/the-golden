@@ -53,7 +53,7 @@ export default function Tour() {
   }
 
   return (
-    <div className="relative h-dvh w-dvw overflow-hidden bg-black">
+    <div className="relative h-lvh w-lvw overflow-hidden bg-black">
       <div className="absolute inset-0">
         <img
           key={current.id}
@@ -66,11 +66,11 @@ export default function Tour() {
       <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0">
-        <div className="pointer-events-auto mx-auto w-full max-w-2xl">
-          <div className="mx-4 rounded-t-2xl border bg-background p-4 shadow-lg">
-            <div className="space-y-2">
-              <h2 className="text-xl font-semibold leading-tight">{current.title}</h2>
-              <p className="text-sm text-muted-foreground">{current.description}</p>
+        <div className="pointer-events-auto w-full">
+          <div className="rounded-t-2xl border bg-background px-5 sm:px-6 pt-5 pb-safe-plus-4 shadow-lg">
+            <div className="space-y-3">
+              <h2 className="text-xl sm:text-2xl font-semibold leading-tight">{current.title}</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">{current.description}</p>
             </div>
             <div className="mt-4 flex items-center justify-between gap-3">
               <Button asChild variant="link" className="px-0">

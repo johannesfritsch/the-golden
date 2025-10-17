@@ -41,15 +41,15 @@ const items = [
 
 export default function Feed() {
   return (
-    <div className="min-h-dvh flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl space-y-6">
+    <div className="min-h-dvh flex items-center justify-center p-6 sm:p-8">
+      <div className="w-full max-w-2xl space-y-7">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Your feed</h1>
           <Button asChild variant="outline">
             <Link to="/">Home</Link>
           </Button>
         </div>
-        <div className="grid gap-6">
+        <div className="grid gap-7">
           {items.map((item, idx) => (
             <Card key={item.id}>
               <CardHeader className="gap-3">

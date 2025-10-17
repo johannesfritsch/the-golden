@@ -17,7 +17,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-dvh flex items-center justify-center p-6">
+    <div className="min-h-dvh flex items-center justify-center p-6 sm:p-8">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="flex justify-center">
