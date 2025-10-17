@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
-import AppLayout from '@/routes/layouts/AppLayout'
+import AppLayout from '@/pages/layouts/AppLayout'
 import Feed from '@/pages/app/Feed'
 import Login from '@/pages/auth/Login'
 import Tour from '@/pages/marketing/Tour'
