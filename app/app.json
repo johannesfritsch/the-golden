@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "app",
+    "name": "The Golden",
     "slug": "app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,7 +16,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "de.zoom7.thegolden",
-      "appleTeamId": "S4NEUU3775"
+      "appleTeamId": "S4NEUU3775",
+      "associatedDomains": [
+        "applinks:www.thegolden.app",
+        "applinks:thegolden.app"
+      ]
     },
     "android": {
       "adaptiveIcon": {

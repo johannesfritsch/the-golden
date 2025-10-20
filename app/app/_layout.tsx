@@ -8,6 +8,9 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider } from '@ui-kitten/components';
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -47,13 +50,20 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const uiKittenTheme = colorScheme === 'dark' ? eva.dark : eva.light;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <>
+      <ApplicationProvider {...eva} theme={uiKittenTheme}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="nfc" options={{ title: 'NFC' }} />
+            <Stack.Screen name="tour" options={{ title: 'App Tour' }} />
+          </Stack>
+        </ThemeProvider>
+      </ApplicationProvider>
+    </>
   );
 }
