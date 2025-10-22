@@ -56,8 +56,8 @@ function RootLayoutNav() {
     <>
       <ApplicationProvider {...eva} theme={uiKittenTheme}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
             <Stack.Screen name="nfc" options={{ title: 'NFC' }} />
             <Stack.Screen name="tour" options={{ title: 'App Tour' }} />
