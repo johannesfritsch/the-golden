@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { Video } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 
 export type VideoPlayerProps = {
   source: any;
@@ -36,16 +36,29 @@ const VideoPlayer = ({ source }: VideoPlayerProps) => {
     }, 150);
   };
 
+  const player = useVideoPlayer(currentSource, (p) => {
+    p.loop = true;
+    p.muted = true;
+  });
+
+  useEffect(() => {
+    try {
+      player.play();
+    } catch {}
+    const t = setTimeout(() => {
+      handleVideoLoad();
+    }, 500);
+    return () => clearTimeout(t);
+  }, [player, currentSource]);
+
   return (
     <View>
       <Animated.View style={overlayStyles}></Animated.View>
-      <Video
-        onLoad={handleVideoLoad}
-        source={currentSource}
-        isLooping
-        shouldPlay
-        isMuted
-        resizeMode="cover"
+      <VideoView
+        player={player}
+        allowsFullscreen
+        allowsPictureInPicture
+        contentFit="cover"
         style={{ width: '100%', height: '100%', zIndex: 100 }}
       />
     </View>
