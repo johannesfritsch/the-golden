@@ -56,8 +56,6 @@ const VideoPlayer = ({ source }: VideoPlayerProps) => {
       <Animated.View style={overlayStyles}></Animated.View>
       <VideoView
         player={player}
-        allowsFullscreen
-        allowsPictureInPicture
         contentFit="cover"
         style={{ width: '100%', height: '100%', zIndex: 100 }}
       />
