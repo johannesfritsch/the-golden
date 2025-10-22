@@ -37,19 +37,30 @@ const EventGallery = ({ event, onPress, fullWidth = false, hideLabels = false }:
     return () => clearInterval(interval);
   }, []);
 
+  const width = Dimensions.get('window').width - (fullWidth ? 0 : 40);
+
   return (
-    <View style={{ height: Dimensions.get('window').width * ratio }}>
+    <View
+      style={{
+        height: width * ratio,
+        width,
+        alignSelf: 'center',
+        backgroundColor: '#B29146',
+        borderRadius: fullWidth ? 0 : 15,
+        overflow: 'hidden',
+      }}
+    >
       <Carousel
         loop={false}
-        width={Dimensions.get('window').width - (fullWidth ? 0 : 40)}
-        height={Dimensions.get('window').width * ratio}
+        width={width}
+        height={width * ratio}
         onConfigurePanGesture={(gestureChain) => gestureChain.activeOffsetX([-10, 10])}
-        style={{ borderRadius: fullWidth ? 0 : 15 }}
+        style={{ backgroundColor: '#B29146' }}
         data={event.images}
         scrollAnimationDuration={200}
         onProgressChange={progress}
         renderItem={({ item }) => (
-          <Pressable style={{ flex: 1, justifyContent: 'center' }} onPress={onPress}>
+          <Pressable style={{ flex: 1, justifyContent: 'center', backgroundColor: '#B29146' }} onPress={onPress}>
             <Image source={{ uri: item }} style={{ width: '100%', height: '100%' }} />
           </Pressable>
         )}
@@ -74,14 +85,19 @@ const EventGallery = ({ event, onPress, fullWidth = false, hideLabels = false }:
         </View>
       )}
 
-      <Pagination.Basic
-        progress={progress}
-        data={event.images}
-        dotStyle={{ backgroundColor: 'rgba(255,255,255,1)', borderRadius: 50 }}
-        activeDotStyle={{ backgroundColor: '#B29146', borderRadius: 50 }}
-        containerStyle={{ gap: 5, marginBottom: 10 }}
-        size={12}
-      />
+      <View
+        pointerEvents="none"
+        style={{ position: 'absolute', bottom: 10, left: 0, right: 0, alignItems: 'center' }}
+      >
+        <Pagination.Basic
+          progress={progress}
+          data={event.images}
+          dotStyle={{ backgroundColor: 'rgba(255,255,255,1)', borderRadius: 50 }}
+          activeDotStyle={{ backgroundColor: '#B29146', borderRadius: 50 }}
+          containerStyle={{ gap: 5 }}
+          size={12}
+        />
+      </View>
     </View>
   );
 };

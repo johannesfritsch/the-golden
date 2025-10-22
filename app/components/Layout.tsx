@@ -1,6 +1,7 @@
 import { RefreshControl, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import { ReactNode } from 'react';
 import CText from './CText';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export type LayoutProps = {
   children: ReactNode;
@@ -15,7 +16,8 @@ export type LayoutProps = {
 };
 
 const Layout = ({ children, topElement, header, footer, bottomElement, style, loading = false, error, refetch = () => {} }: LayoutProps) => {
-  const bottomSpacerHeight = 50;
+  const insets = useSafeAreaInsets();
+  const bottomSpacerHeight = 64 + insets.bottom; // match BottomBar base height + safe area
 
   return (
     <View style={[style, { height: '100%', backgroundColor: 'white' }]}> 
